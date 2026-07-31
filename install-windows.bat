@@ -1,11 +1,12 @@
 @echo off
 chcp 65001 >nul
-title LA DIVINE PharmaFinance Pro v3.0 - Installateur Windows
+title PharmaFinance Pro v3.0 - Installateur Windows
 color 0A
 
 echo.
 echo ╔════════════════════════════════════════════════════════════╗
-echo ║     🏥 LA DIVINE PHARMAFINANCE PRO v3.0                  ║
+echo ║     💊 PHARMAFINANCE PRO v3.0                           ║
+echo ║     Gestion Financière Professionnelle                  ║
 echo ║     Installateur Automatique Windows                     ║
 echo ╚════════════════════════════════════════════════════════════╝
 echo.
@@ -100,12 +101,12 @@ if %errorLevel% neq 0 (
 
 echo.
 echo ══════════════════════════════════════════════════════
-if exist "dist-release\LA DIVINE PharmaFinance Pro-Setup-3.0.0.exe" (
+if exist "dist-release\PharmaFinance-Setup-3.0.0.exe" (
     echo ✅✅✅ SUCCÈS! L'installateur a été créé! ✅✅✅
     echo ══════════════════════════════════════════════════════
     echo.
     echo 📁 Fichier généré:
-    echo    dist-release\LA DIVINE PharmaFinance Pro-Setup-3.0.0.exe
+    echo    dist-release\PharmaFinance-Setup-3.0.0.exe
     echo.
     echo 🚀 Ouverture du dossier...
     explorer dist-release
@@ -124,6 +125,8 @@ echo ╠════════════════════════
 echo ║  Admin:        admin / admin2024!                       ║
 echo ║  Manager:      manager_biayi / biayi2024!               ║
 echo ║  Comptable:   comptable_central / compta2024!          ║
+echo ║  Sous-Agent:   agent_kasai / agent2024!                 ║
+echo ║  Sous-Agent:   agent_kolwezi / agent2024!               ║
 echo ╚════════════════════════════════════════════════════════════╝
 echo.
 pause

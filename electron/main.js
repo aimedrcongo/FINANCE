@@ -22,7 +22,7 @@ function createWindow() {
         height: 900,
         minWidth: 1024,
         minHeight: 700,
-        title: 'LA DIVINE PharmaFinance Pro',
+        title: 'PharmaFinance Pro - Gestion Financière',
         icon: path.join(__dirname, '../icons/icon-256x256.png') || path.join(__dirname, '../icons/icon-512x512.png'),
         webPreferences: {
             nodeIntegration: false,

@@ -1,49 +1,78 @@
-# 🏥 LA DIVINE PharmaFinance Pro v3.0
+# 💊 PharmaFinance Pro - Gestion Financière
 
-![Version](https://img.shields.io/badge/version-3.0.0-green) ![Status](https://img.shields.io/badge/status-stable-brightgreen) ![License](https://img.shields.io/badge/license-Proprietary-red)
+![Version](https://img.shields.io/badge/version-3.0.0-green) ![Status](https://img.shields.io/badge/status-production_ready-brightgreen) ![License](https://img.shields.io/badge/license-Proprietary-red)
 
-**Gestion Financière Multi-sites** pour Pharmacie LA DIVINE Health Care
+**Application Professionnelle de Gestion Financière** pour Pharmacie LA DIVINE Health Care
 
 ---
 
 ## 📋 Table des Matières
 
-- [✨ Nouveautés v3.0](#-nouveautés-v30)
+- [✨ Fonctionnalités v3.0](#-fonctionnalités-v30)
 - [🚀 Installation Rapide](#-installation-rapide)
+- [👤 Utilisateurs de Test](#-utilisateurs-de-test)
+- [📊 Génération Données Test](#-génération-données-test)
 - [🔧 Configuration](#-configuration)
-- [👤 Utilisateurs](#-utilisateurs)
-- [📊 Fonctionnalités](#-fonctionnalités)
 - [📦 Packaging Electron](#-packaging-electron)
-- [❓ FAQ](#-faq)
+- [❓ Support](#-support)
 
 ---
 
-## ✨ Nouveautés v3.0
+## ✨ Fonctionnalités v3.0
 
-### 🎯 Option C - Innovations Majeures
+### 🎯 Dashboard Intelligent
+- **6 KPIs** en temps réel (Dépenses, Versements FC/USD, Solde, Sites actifs)
+- **4 Graphiques Chart.js** interactifs:
+  - 📈 Tendance Revenus (7/14/30/90 jours)
+  - 🍩 Répartition Dépenses par catégorie
+  - 🏥 Performance comparée par site
+  - 📅 Évolution mensuelle avec statistiques
 
-| Fonctionnalité | Description |
-|----------------|-------------|
-| **📊 Dashboard Graphique** | 4 graphiques Chart.js interactifs (Tendance, Répartition, Comparaison Sites, Évolution) |
-| **🏥 Score Santé Financière** | Algorithme de scoring 0-100 basé sur 5 piliers (Rentabilité, Liquidité, Croissance, Dettes, Régularité) |
-| **📥 Import CSV Massive** | Importation par lot avec validation, drag & drop, templates |
-| **📄 Rapports PDF Pro** | 4 types de rapports (Mensuel, Trimestriel, Annuel, Par Site) avec export PDF |
+### 🏥 Score Santé Financière
+Algorithme multi-critères **0-100**:
 
-### 🎯 Option A - Innovations Précédentes
+| Pilier | Poids | Ce qu'il mesure |
+|--------|-------|----------------|
+| 💹 Rentabilité | 25% | Marge bénéficiaire |
+| 💧 Liquidité | 20% | Ratio cash flow |
+| 📈 Croissance | 20% | vs mois précédent |
+| 📋 Gestion Dettes | 20% | Ratio dettes/revenus |
+| 📅 Régularité | 15% | % rapports soumis |
 
-| Fonctionnalité | Description |
-|----------------|-------------|
-| **⚡ Quick Add Mobile** | Bouton flottant + saisie rapide 3 clics |
-| **🔔 Alertes Proactives** | Rappels dettes J-7/J-3/J-0, anomalies >30% |
-| **🌙 Mode Sombre/Clair** | Toggle automatique selon préférence système |
+**Interprétation:**
+- 🟢 **80-100**: Excellent 💚
+- 🔵 **65-79**: Bon 💙  
+- 🟠 **45-64**: Moyen 🧡
+- 🔴 **0-44**: Critique ❤️‍🩹
 
-### 🔐 Sécurité v2.0
+### 📥 Import CSV Massif
+- ✅ Drag & drop ou sélection fichier
+- ✅ Support CSV/TSV auto-détection séparateur
+- ✅ Validation intelligente avant import
+- ✅ Templates téléchargeables (Versements/Dépenses/Rapports)
+- ✅ Progression en temps réel
 
-| Fonctionnalité | Description |
-|----------------|-------------|
-| **Multi-utilisateurs** | 3 rôles: Admin, Manager, Comptable |
-| **Permissions RBAC** | Contrôle d'accès granulaire par module |
-| **Audit Trail** | Journal des actions (1000 entrées max) |
+### 📄 Rapports PDF Professionnels
+- **4 types**: Mensuel, Trimestriel, Annuel, Par Site
+- Aperçu temps réel avant génération
+- Export PDF via impression navigateur
+- KPIs + graphiques + score santé intégrés
+- Recommandations automatiques personnalisées
+
+### 🔐 Sécurité Multi-utilisateurs
+| Rôle | Permissions |
+|------|------------|
+| 👑 **Admin** | Accès total, gestion utilisateurs, audit |
+| 👔 **Manager** | Rapports et dépenses de son site |
+| 📊 **Comptable** | Consultation seule, consolidation |
+| 👤 **Agent/Sous-agent** | Saisie terrain, données de son site |
+
+### ⚡ Autres Fonctionnalités
+- ⚡ **Quick Add Mobile** - Saisie rapide 3 clics
+- 🔔 **Alertes Proactives** - Dettes J-7/J-3/J-0, anomalies >30%
+- 🌙 **Mode Sombre/Clair** - Toggle automatique système
+- 📱 **PWA Offline** - Fonctionne sans internet
+- 🔄 **Audit Trail** - Journal complet des actions
 
 ---
 
@@ -51,12 +80,17 @@
 
 ### Méthode 1: Téléchargement Direct (Recommandé)
 
-1. **Téléchargez le ZIP** :
+1. **Téléchargez le ZIP officiel v3.0.0**:
    
    👉 https://github.com/aimedrcongo/FINANCE/archive/refs/tags/v3.0.0.zip
 
-2. **Extraire** l'archive
-3. **Lancer** `install-windows.bat` (clic droit → Administrateur)
+2. **Extraire** l'archive → Renommer en `pharmafinance-v3`
+
+3. **Lancer** `install-windows.bat` (Clic droit → Administrateur)
+
+4. **Attendre** ~10-15 minutes (téléchargement Electron + build .exe)
+
+5. **Installer** l'exécutable généré dans `dist-release/`
 
 ### Méthode 2: Git Clone
 
@@ -67,109 +101,68 @@ npm install
 npm run build:win
 ```
 
-### Méthode 3: Test Rapide (sans installation)
+### Méthode 3: Test Navigateur (sans installation)
 
 ```bash
-npm start
+# Ouvrir index.html directement dans Chrome/Firefox
+# Ou utiliser un serveur local:
+python3 -m http.server 8080
+# Puis ouvrir http://localhost:8080
 ```
+
+---
+
+## 👤 Utilisateurs de Test
+
+| Rôle | Identifiant | Mot de Passe | Site |
+|------|-------------|--------------|------|
+| 👑 **Administrateur** | `admin` | `admin2024!` | Tous les sites |
+| 👔 **Manager BIAYI** | `manager_biayi` | `biayi2024!` | BIAYI |
+| 👔 **Manager PHARMAFRICA** | `manager_pharmafrica` | `pharmafrica2024!` | PHARMAFRICA |
+| 📊 **Comptable Central** | `comptable_central` | `compta2024!` | Siège Central |
+| 👤 **Agent KASAI** | `agent_kasai` | `agent2024!` | KASAI |
+| 👤 **Agent KOLWEZI 1** | `agent_kolwezi1` | `agent2024!` | KOLWEZI 1 |
+| 👤 **Agent HEWA BORA 1** | `agent_hewabora1` | `agent2024!` | HEWA BORA 1 |
+
+> ⚠️ **Important**: Changez ces mots de passe après première connexion !
+
+---
+
+## 📊 Génération Données Test
+
+Pour tester immédiatement avec des données réalistes de **Juillet 2024**:
+
+1. Ouvrez l'application dans le navigateur
+2. Appuyez **F12** pour ouvrir la console développeur
+3. Copiez-collez cette commande:
+
+```javascript
+await TestDataGenerator.generateAll()
+```
+
+**Données générées automatiquement:**
+- ✅ ~200 versements quotidiens (8 sites × 25 jours)
+- ✅ ~150 dépenses (fixes + variables)
+- ✅ ~210 rapports journaliers
+- ✅ ~15 dettes fournisseurs
+
+**Total: ~575 enregistrements de test réalistes**
 
 ---
 
 ## 🔧 Configuration Requise
 
 ### Système
-- ✅ Windows 10/11 (64-bit)
+- ✅ Windows 10/11 (64-bit) - **Principal**
 - ✅ macOS 10.15+
-- ✅ Linux (Ubuntu 20.04+)
+- ✅ Linux Ubuntu 20.04+
 
-### Logiciels
+### Logiciels (pour packaging .exe uniquement)
 - **Node.js** 18+ : https://nodejs.org (version LTS)
-- **Git** (optionnel) : https://git-scm.com
+- **Git** : https://git-scm.com (optionnel)
 
-### Navigateur (mode web)
+### Navigateur (mode web PWA)
 - Chrome 90+, Firefox 88+, Edge 90+
-
----
-
-## 👤 Utilisateurs Par Défaut
-
-| Rôle | Identifiant | Mot de Passe | Permissions |
-|------|-------------|--------------|-------------|
-| 👑 **Administrateur** | `admin` | `admin2024!` | Accès total, gestion utilisateurs, audit |
-| 👔 **Manager** | `manager_biayi` | `biayi2024!` | Rapports et dépenses de son site |
-| 📊 **Comptable** | `comptable_central` | `compta2024!` | Consultation seule, consolidation |
-
-> ⚠️ **Important**: Changez ces mots de passe après première connexion !
-
----
-
-## 📊 Fonctionnalités Complètes
-
-### 🏠 Dashboard
-- **6 KPIs** en temps réel (Dépenses, Versements FC/USD, Solde, Sites, Jours actifs)
-- **Graphiques interactifs** Chart.js
-- **Score Santé Financière** avec jauge animée
-- **Tableau performance par site**
-
-### 💰 Versements
-- Saisie quotidienne par pharmacie
-- Double devise (FC / USD)
-- Historique complet avec filtres
-- Export CSV/Excel
-
-### 📤 Dépenses
-- Catégorisation (Salaires, Loyer, Électricité, etc.)
-- Suivi par site et fournisseur
-- Alertes seuils dépassés
-
-### 📝 Rapports Journaliers
-- Ventes du jour (Dollars + Francs)
-- Caisse ouverture/fermeture
-- Calculs automatiques
-
-### 📈 Score Santé Financière
-
-Algorithme multi-critères :
-
-```
-Score Global = 
-  (Rentabilité × 25%) +
-  (Liquidité × 20%) +
-  (Croissance × 20%) +
-  (Gestion Dettes × 20%) +
-  (Régularité × 15%)
-```
-
-**Interprétation:**
-- 🟢 **80-100** : Excellent 💚
-- 🔵 **65-79** : Bon 💙  
-- 🟠 **45-64** : Moyen 🧡
-- 🔴 **0-44** : Critique ❤️‍🩹
-
-### 📥 Import CSV
-
-Formats supportés:
-- `.csv` (virgule ou point-virgule)
-- `.tsv` (tabulation)
-
-Types d'import:
-- Versements
-- Dépenses
-- Rapports journaliers
-
-### 📄 Rapports PDF
-
-4 types disponibles:
-1. **Mensuel** - Synthèse du mois
-2. **Trimestriel** - Tendances 3 mois
-3. **Annuel** - Bilan complet
-4. **Par Site** - Focus pharmacie
-
-Contenu:
-- KPIs avec graphiques
-- Score santé intégré
-- Tableaux détaillés
-- Recommandations automatiques
 
 ---
 
@@ -178,16 +171,13 @@ Contenu:
 ### Créer l'installateur Windows (.exe)
 
 ```bash
-# Installateur NSIS (recommandé)
+# Depuis le dossier du projet:
 npm run build:win
-
-# Version Portable (sans installation)
-npm run build:win -- --portable
 ```
 
 **Fichiers générés dans `dist-release/`:**
-- `LA DIVINE PharmaFinance Pro-Setup-3.0.0.exe`
-- `LA DIVINE PharmaFinance Pro-Portable-3.0.0.exe`
+- `PharmaFinance-Setup-3.0.0.exe` ← Installateur NSIS
+- `PharmaFinance-Portable-3.0.0.exe` ← Version portable
 
 ### Autres plateformes
 
@@ -204,7 +194,7 @@ npm run build:all
 
 ---
 
-## 🏥 Pharmacies Gérées
+## 🏥 Pharmacies Gérées (8 Sites)
 
 | Code | Nom | Ville |
 |------|-----|-------|
@@ -237,10 +227,10 @@ https://github.com/aimedrcongo/FINANCE/releases
 ## ❓ FAQ
 
 ### Q: L'application fonctionne-t-elle hors-ligne ?
-**R:** Oui ! C'est une PWA (Progressive Web App). Après premier chargement, elle fonctionne sans internet.
+**R:** Oui ! C'est une PWA (Progressive Web App). Après premier chargement, elle fonctionne **complètement sans internet**.
 
 ### Q: Les données sont-elles sécurisées ?
-**R:** Oui, tout est stocké localement dans IndexedDB (navigateur) ou fichier local (Electron). Rien ne quitte votre ordinateur.
+**R:** Oui, tout est stocké localement dans IndexedDB (navigateur) ou fichier local (Electron). **Rien ne quitte votre ordinateur.**
 
 ### Q: Puis-je ajouter des pharmacies ?
 **R:** Oui, via la page "Pharmacies" (Admin uniquement).
@@ -251,12 +241,15 @@ https://github.com/aimedrcongo/FINANCE/releases
 ### Q: Le .exe fonctionne sur quel Windows ?
 **R:** Windows 10/11 64-bit (x86_64 ou ARM64).
 
+### Q: Comment tester avec des données ?
+**R:** Ouvrez la console (F12) et lancez: `await TestDataGenerator.generateAll()`
+
 ---
 
 ## 📞 Support
 
 - **Documentation**: Ce fichier README
-- **Mises à jour**: https://github.com/aimedrcongo/FINANCE/releases
+- **Releases**: https://github.com/aimedrcongo/FINANCE/releases
 - **Issues**: https://github.com/aimedrcongo/FINANCE/issues
 
 ---
@@ -266,15 +259,15 @@ https://github.com/aimedrcongo/FINANCE/releases
 **Propriétaire - Pharmacie LA DIVINE Health Care**
 
 © 2024 Tous droits réservés.
-
 Usage interne uniquement. Reproduction interdite sans autorisation.
 
 ---
 
 <div align="center">
 
-**Développé avec ❤️ pour Pharmacie LA DIVINE Health Care**
+**💊 Développé avec précision pour Pharmacie LA DIVINE Health Care**
 
-*Version 3.0.0 - Juillet 2024*
+*Version 3.0.0 - Production Ready*  
+*Juillet 2024*
 
 </div>

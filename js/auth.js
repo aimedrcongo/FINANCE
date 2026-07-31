@@ -174,6 +174,49 @@ class AuthSystem {
                 lastLogin: null,
                 passwordChanged: false,
                 notes: 'Comptable principal pour consolidation'
+            },
+            // === SOUS-AGENTS POUR TESTS ===
+            {
+                id: 'usr_005',
+                username: 'agent_kasai',
+                password: 'agent2024!',
+                fullName: 'Agent KASAI',
+                role: 'manager',  // Agent avec permissions limitées
+                pharmacyId: 'pharma_4',
+                pharmacyName: 'KASAI',
+                active: true,
+                createdAt: new Date().toISOString(),
+                lastLogin: null,
+                passwordChanged: false,
+                notes: 'Agent de terrain - Site KASAI'
+            },
+            {
+                id: 'usr_006',
+                username: 'agent_kolwezi1',
+                password: 'agent2024!',
+                fullName: 'Agent KOLWEZI 1',
+                role: 'manager',
+                pharmacyId: 'pharma_7',
+                pharmacyName: 'KOLWEZI 1',
+                active: true,
+                createdAt: new Date().toISOString(),
+                lastLogin: null,
+                passwordChanged: false,
+                notes: 'Agent de terrain - Site KOLWEZI 1'
+            },
+            {
+                id: 'usr_007',
+                username: 'agent_hewabora1',
+                password: 'agent2024!',
+                fullName: 'Agent HEWA BORA 1',
+                role: 'manager',
+                pharmacyId: 'pharma_5',
+                pharmacyName: 'HEWA BORA 1',
+                active: true,
+                createdAt: new Date().toISOString(),
+                lastLogin: null,
+                passwordChanged: false,
+                notes: 'Agent de terrain - Site HEWA BORA 1'
             }
         ];
     }
