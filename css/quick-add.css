@@ -1,0 +1,525 @@
+/* ============================================
+   QUICK ADD MOBILE - Styles FAB (Floating Action Button)
+   LA DIVINE PharmaFinance Pro v3.0
+   ============================================ */
+
+/* ===== CONTAINER PRINCIPAL ===== */
+.fab-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.fab-container.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* ===== BOUTON PRINCIPAL (+) ===== */
+.fab-main {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-700) 0%, var(--primary-500) 100%);
+    border: none;
+    cursor: pointer;
+    box-shadow: 
+        0 6px 20px rgba(10, 110, 50, 0.4),
+        0 2px 8px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.fab-main:hover {
+    transform: scale(1.08);
+    box-shadow: 
+        0 8px 25px rgba(10, 110, 50, 0.5),
+        0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.fab-main:active {
+    transform: scale(0.95);
+}
+
+.fab-main.rotated {
+    transform: rotate(45deg) scale(1.08);
+    background: linear-gradient(135deg, var(--error) 0%, #e53935 100%);
+    box-shadow: 
+        0 8px 25px rgba(198, 40, 40, 0.5),
+        0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.fab-plus {
+    font-size: 28px;
+    color: white;
+    font-weight: 300;
+    line-height: 1;
+    user-select: none;
+}
+
+/* ===== BADGE NOTIFICATIONS ===== */
+.fab-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 22px;
+    height: 22px;
+    background: var(--error);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    animation: badgePulse 2s infinite;
+}
+
+@keyframes badgePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+
+/* ===== MENU RAPIDE (Items) ===== */
+.fab-menu {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+}
+
+.fab-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    opacity: 0;
+    transform: translateX(20px) scale(0.8);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    pointer-events: none;
+    white-space: nowrap;
+    border: 2px solid transparent;
+}
+
+.fab-item.show {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    pointer-events: auto;
+}
+
+.fab-item:hover {
+    transform: translateX(-5px) scale(1.02);
+    border-color: var(--primary-300);
+    box-shadow: 0 6px 20px rgba(10, 110, 50, 0.2);
+}
+
+.fab-item:active {
+    transform: translateX(-5px) scale(0.98);
+}
+
+/* Icônes des items */
+.fab-icon {
+    font-size: 22px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: var(--gray-100);
+}
+
+.fab-item[data-action="versement"] .fab-icon {
+    background: var(--success-light);
+}
+
+.fab-item[data-action="depense"] .fab-icon {
+    background: var(--warning-light);
+}
+
+.fab-item[data-action="rapport"] .fab-icon {
+    background: var(--info-light);
+}
+
+.fab-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-800);
+}
+
+/* ===== MODAL QUICK ADD ===== */
+.quick-add-modal {
+    z-index: 10000 !important;
+    backdrop-filter: blur(8px);
+}
+
+.quick-add-modal .modal-overlay {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.quick-add-content {
+    max-width: 480px;
+    margin: 40px auto;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUpQuick 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideUpQuick {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.quick-add-header {
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.quick-add-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--gray-800);
+}
+
+.quick-add-header .modal-close {
+    background: rgba(0, 0, 0, 0.1);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-600);
+    transition: all 0.2s;
+}
+
+.quick-add-header .modal-close:hover {
+    background: rgba(0, 0, 0, 0.2);
+    color: var(--error);
+}
+
+/* ===== FORMULAIRE QUICK ADD ===== */
+.quick-add-form {
+    padding: 24px;
+}
+
+.quick-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.quick-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.quick-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-700);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.quick-label .required {
+    color: var(--error);
+}
+
+.quick-label .optional {
+    color: var(--gray-400);
+    font-weight: 400;
+}
+
+.quick-input {
+    padding: 12px 16px;
+    border: 2px solid var(--gray-200);
+    border-radius: 12px;
+    font-size: 15px;
+    transition: all 0.2s ease;
+    background: var(--gray-50);
+}
+
+.quick-input:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    background: white;
+    box-shadow: 0 0 0 4px var(--primary-100);
+}
+
+.quick-input::placeholder {
+    color: var(--gray-400);
+}
+
+/* Actions du formulaire */
+.quick-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--gray-200);
+}
+
+.quick-btn-secondary,
+.quick-btn-primary {
+    flex: 1;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.quick-btn-secondary {
+    background: var(--gray-100);
+    color: var(--gray-700);
+}
+
+.quick-btn-secondary:hover {
+    background: var(--gray-200);
+}
+
+.quick-btn-primary {
+    background: linear-gradient(135deg, var(--primary-700), var(--primary-500));
+    color: white;
+    box-shadow: 0 4px 15px rgba(10, 110, 50, 0.3);
+}
+
+.quick-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(10, 110, 50, 0.4);
+}
+
+.quick-btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Raccourci clavier */
+.quick-shortcut {
+    text-align: center;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--gray-200);
+}
+
+.quick-shortcut small {
+    color: var(--gray-400);
+    font-size: 12px;
+}
+
+/* ===== TOASTS QUICK ADD ===== */
+.quick-toast {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    padding: 16px 24px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 99999;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    max-width: 360px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.quick-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast-success {
+    background: linear-gradient(135deg, #4caf50, #66bb6a);
+    color: white;
+}
+
+.toast-error {
+    background: linear-gradient(135deg, #f44336, #ef5350);
+    color: white;
+}
+
+/* ===== RESPONSIVE MOBILE ===== */
+@media (max-width: 768px) {
+    .fab-container {
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .fab-main {
+        width: 56px;
+        height: 56px;
+    }
+
+    .fab-plus {
+        font-size: 26px;
+    }
+
+    .fab-menu {
+        bottom: 65px;
+        right: -8px;
+        gap: 10px;
+    }
+
+    .fab-item {
+        padding: 10px 14px;
+        border-radius: 12px;
+    }
+
+    .fab-label {
+        font-size: 12px;
+    }
+
+    .fab-icon {
+        font-size: 20px;
+        width: 32px;
+        height: 32px;
+    }
+
+    .quick-add-content {
+        margin: 20px;
+        max-width: calc(100vw - 40px);
+    }
+
+    .quick-add-form {
+        padding: 20px;
+    }
+
+    .quick-actions {
+        flex-direction: column-reverse;
+    }
+
+    .quick-toast {
+        left: 16px;
+        right: 16px;
+        max-width: calc(100vw - 32px);
+    }
+}
+
+@media (max-width: 480px) {
+    .fab-container {
+        bottom: 16px;
+        right: 16px;
+    }
+
+    .fab-main {
+        width: 52px;
+        height: 52px;
+    }
+
+    .fab-menu {
+        bottom: 60px;
+        right: -4px;
+    }
+
+    .fab-item {
+        padding: 8px 12px;
+        gap: 10px;
+    }
+
+    .fab-label {
+        /* Cacher le label sur très petits écrans */
+        display: none;
+    }
+
+    .fab-item {
+        width: 48px;
+        height: 48px;
+        padding: 0;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+    .fab-icon {
+        margin: 0;
+    }
+}
+
+/* ===== ANIMATIONS SPÉCIALES ===== */
+
+/* Ripple effect sur le bouton principal */
+.fab-main::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.fab-main:active::after {
+    width: 200%;
+    height: 200%;
+}
+
+/* Animation d'entrée des items en cascade */
+.fab-container.expanded .fab-item:nth-child(1) {
+    transition-delay: 0ms;
+}
+
+.fab-container.expanded .fab-item:nth-child(2) {
+    transition-delay: 80ms;
+}
+
+.fab-container.expanded .fab-item:nth-child(3) {
+    transition-delay: 160ms;
+}
+
+/* Mode sombre support */
+body.dark-mode .fab-item {
+    background: var(--bg-dark);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .fab-label {
+    color: var(--gray-200);
+}
+
+body.dark-mode .quick-input {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+body.dark-mode .quick-input:focus {
+    border-color: var(--primary-400);
+    background: rgba(255, 255, 255, 0.08);
+}
