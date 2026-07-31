@@ -1,29 +1,28 @@
-; LA DIVINE PharmaFinance Pro - NSIS Installer Script
-; Custom installer with branding
+; LA DIVINE PharmaFinance Pro v3 - NSIS Installer Script
+; Custom installer with branding - Version 3.0.0
 
 !include "MUI2.nsh"
 
 ; General settings
-Name "LA DIVINE PharmaFinance Pro"
+Name "LA DIVINE PharmaFinance Pro v3"
 OutFile "..\dist-release\LA-DIVINE-PharmaFinance-Setup.exe"
 InstallDir "$PROGRAMFILES\LA DIVINE\PharmaFinance Pro"
 InstallDirRegKey HKCU "Software\LA DIVINE\PharmaFinance Pro" ""
 RequestExecutionLevel admin
 
-; Version information
-VIProductVersion "2.0.0.0"
+; NOTE: VIProductVersion is auto-added by electron-builder
+; Do NOT define it here to avoid "already defined" error!
+
+; Version keys (without VIProductVersion)
 VIAddVersionKey "ProductName" "LA DIVINE PharmaFinance Pro"
 VIAddVersionKey "CompanyName" "Pharmacie LA DIVINE Health Care"
-VIAddVersionKey "LegalCopyright" "© 2024 Pharmacie LA DIVINE Health Care"
-VIAddVersionKey "FileDescription" "Gestion Financière Multi-sites"
-VIAddVersionKey "FileVersion" "2.0.0.0"
+VIAddVersionKey "LegalCopyright" "© 2024-2026 Pharmacie LA DIVINE Health Care"
+VIAddVersionKey "FileDescription" "Gestion Financière Multi-sites v3"
+VIAddVersionKey "FileVersion" "3.0.0.0"
 
 ; Interface settings
 !define MUI_ICON "..\icons\icon-256x256.png"
 !define MUI_UNICON "..\icons\icon-256x256.png"
-!define MUI_HEADERIMAGE
-!define MUI_HEADERIMAGE_BITMAP "..\build\installer-header.bmp"
-!define MUI_WELCOMEFINISHPAGE_BITMAP "..\build\installer-welcome.bmp"
 
 ; Pages
 !insertmacro MUI_PAGE_WELCOME
@@ -55,7 +54,7 @@ Section "Installation Principale" SecMain
     
     ; Registry entries for Add/Remove Programs
     WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PharmaFinancePro" \
-                     "DisplayName" "LA DIVINE PharmaFinance Pro"
+                     "DisplayName" "LA DIVINE PharmaFinance Pro v3"
     WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PharmaFinancePro" \
                      "UninstallString" "$\"$INSTDIR\Uninstall.exe$""
     WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PharmaFinancePro" \
@@ -63,7 +62,7 @@ Section "Installation Principale" SecMain
     WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PharmaFinancePro" \
                      "Publisher" "Pharmacie LA DIVINE Health Care"
     WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PharmaFinancePro" \
-                     "DisplayVersion" "2.0.0"
+                     "DisplayVersion" "3.0.0"
     WriteRegDWORD HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PharmaFinancePro" \
                       "NoModify" 1
     WriteRegDWORD HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\PharmaFinancePro" \
