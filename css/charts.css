@@ -1,0 +1,320 @@
+/* ============================================
+   PharmaFinance Pro v3.0 - Styles Graphiques
+   Chart.js Dashboard Integration
+   ============================================ */
+
+/* === Grille de Graphiques === */
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+@media (max-width: 1200px) {
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* === Carte de Graphique === */
+.chart-card {
+    background: var(--bg-primary);
+    border-radius: var(--radius-md, 12px);
+    box-shadow: var(--shadow-sm, 0 2px 8px rgba(0,0,0,0.06));
+    border: 1px solid var(--border-color, #E5E7EB);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chart-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md, 0 8px 24px rgba(0,0,0,0.1));
+}
+
+.chart-card-wide {
+    grid-column: span 2;
+}
+
+@media (max-width: 1200px) {
+    .chart-card-wide {
+        grid-column: span 1;
+    }
+}
+
+/* === En-tête de Graphique === */
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color, #F3F4F6);
+    background: linear-gradient(135deg, #FAFBFC 0%, #F9FAFB 100%);
+}
+
+.chart-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--gray-800, #1F2937);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* === Contrôles de Graphique === */
+.chart-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.chart-select {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    border: 1px solid var(--border-color, #D1D5DB);
+    border-radius: 6px;
+    background: white;
+    color: var(--gray-700, #374151);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chart-select:focus {
+    outline: none;
+    border-color: var(--primary-400, #5AAA1E);
+    box-shadow: 0 0 0 3px rgba(90, 170, 30, 0.1);
+}
+
+.chart-btn {
+    padding: 6px 14px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    border: 1px solid var(--border-color, #D1D5DB);
+    border-radius: 6px;
+    background: white;
+    color: var(--gray-600, #4B5563);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chart-btn:hover {
+    background: var(--primary-50, #E8F5E9);
+    border-color: var(--primary-300, #6EBE3E);
+    color: var(--primary-700, #0A6E32);
+}
+
+.chart-btn.active {
+    background: var(--primary-700, #0A6E32);
+    border-color: var(--primary-700, #0A6E32);
+    color: white;
+}
+
+/* === Container de Canvas === */
+.chart-container {
+    padding: var(--spacing-lg);
+    position: relative;
+    height: 280px;
+}
+
+.chart-container-pie {
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chart-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* === Légende Personnalisée === */
+.chart-legend-custom {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    max-width: 200px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: var(--gray-600, #4B5563);
+}
+
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* === Stats du Graphique === */
+.chart-stats {
+    display: flex;
+    gap: var(--spacing-lg);
+}
+
+.chart-stat-item {
+    font-size: 0.8rem;
+    color: var(--gray-600, #4B5563);
+}
+
+.chart-stat-item strong {
+    color: var(--gray-800, #1F2937);
+}
+
+.chart-stat-item span[id^="stat-"] {
+    color: var(--primary-700, #0A6E32);
+    font-weight: 600;
+}
+
+/* === État Vide / Loading === */
+.chart-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--gray-400, #9CA3AF);
+    text-align: center;
+    padding: 40px;
+}
+
+.chart-empty-icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+.chart-empty-text {
+    font-size: 0.9rem;
+}
+
+/* === Animations === */
+@keyframes chartFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.chart-card {
+    animation: chartFadeIn 0.4s ease forwards;
+}
+
+.chart-card:nth-child(1) { animation-delay: 0.05s; }
+.chart-card:nth-child(2) { animation-delay: 0.1s; }
+.chart-card:nth-child(3) { animation-delay: 0.15s; }
+.chart-card:nth-child(4) { animation-delay: 0.2s; }
+
+/* === Responsive === */
+@media (max-width: 768px) {
+    .chart-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .chart-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .chart-container {
+        height: 240px;
+        padding: var(--spacing-md);
+    }
+    
+    .chart-container-pie {
+        height: 260px;
+    }
+    
+    .chart-stats {
+        flex-direction: column;
+        gap: 6px;
+    }
+    
+    .chart-btn {
+        padding: 5px 10px;
+        font-size: 0.72rem;
+    }
+    
+    .chart-select {
+        font-size: 0.75rem;
+        padding: 5px 10px;
+    }
+}
+
+/* === Mode Sombre Support === */
+[data-theme="dark"] .chart-card {
+    background: var(--dark-card, #1F2937);
+    border-color: var(--dark-border, #374151);
+}
+
+[data-theme="dark"] .chart-header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-color: var(--dark-border, #374151);
+}
+
+[data-theme="dark"] .chart-title {
+    color: var(--dark-text, #F9FAFB);
+}
+
+[data-theme="dark"] .chart-select {
+    background: var(--dark-input, #374151);
+    border-color: var(--dark-border, #4B5563);
+    color: var(--dark-text, #F9FAFB);
+}
+
+[data-theme="dark"] .chart-btn {
+    background: var(--dark-input, #374151);
+    border-color: var(--dark-border, #4B5563);
+    color: var(--dark-text-muted, #9CA3AF);
+}
+
+[data-theme="dark"] .chart-btn.active {
+    background: var(--primary-400, #5AAA1E);
+    border-color: var(--primary-400, #5AAA1E);
+}
+
+[data-theme="dark"] .chart-stat-item {
+    color: var(--dark-text-muted, #9CA3AF);
+}
+
+[data-theme="dark"] .chart-stat-item strong {
+    color: var(--dark-text, #F9FAFB);
+}
+
+/* === Tooltip Personnalisé (overlay) === */
+.chart-tooltip-custom {
+    position: absolute;
+    pointer-events: none;
+    background: rgba(31, 41, 55, 0.95);
+    color: white;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    z-index: 1000;
+    backdrop-filter: blur(8px);
+    transition: opacity 0.15s ease;
+}
+
+.chart-tooltip-custom::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid rgba(31, 41, 55, 0.95);
+}

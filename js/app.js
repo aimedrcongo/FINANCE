@@ -50,6 +50,21 @@ const App = {
                 await Innovations.init();
             }
             
+            // 8. Initialiser Quick Add Mobile
+            if (typeof QuickAdd !== 'undefined') {
+                QuickAdd.init();
+            }
+            
+            // 9. Initialiser Smart Alerts Proactives
+            if (typeof SmartAlerts !== 'undefined') {
+                SmartAlerts.init();
+            }
+            
+            // 10. Initialiser Dark Mode / Light Mode
+            if (typeof DarkMode !== 'undefined') {
+                DarkMode.init();
+            }
+            
             console.log('[App] ✅ Application LA DIVINE initialisée avec succès');
             
         } catch (error) {
@@ -197,6 +212,12 @@ const App = {
             case 'audit-log':
                 this.loadAuditLog();
                 break;
+            case 'import-csv':
+                this.loadImportCSV();
+                break;
+            case 'reports':
+                this.loadReports();
+                break;
         }
     },
 
@@ -216,6 +237,16 @@ const App = {
             
             // Mettre à jour le tableau par site
             this.updateDashboardTable(kpis.stats_par_site);
+            
+            // ★ v3.0: Initialiser les graphiques interactifs
+            if (typeof DashboardCharts !== 'undefined') {
+                await DashboardCharts.refreshAll();
+            }
+            
+            // ★ v3.0: Initialiser le Score Santé Financière
+            if (typeof HealthScore !== 'undefined') {
+                await HealthScore.refresh();
+            }
             
         } catch (error) {
             console.error('[Dashboard] Erreur:', error);
@@ -1496,6 +1527,28 @@ const App = {
         
         authSystem.logAction('DATA_EXPORT', 'Export liste utilisateurs CSV');
         Export.showToast('Liste exportée!', 'success');
+    },
+
+    // ==========================================
+    // IMPORTATION CSV v3.0
+    // ==========================================
+
+    async loadImportCSV() {
+        console.log('[App] Chargement page Import CSV');
+        
+        // Initialiser le module CSVImport si disponible
+        if (typeof CSVImport !== 'undefined') {
+            await CSVImport.init();
+        }
+    },
+
+    async loadReports() {
+        console.log('[App] Chargement page Rapports PDF');
+        
+        // Initialiser le module PDFReports si disponible
+        if (typeof PDFReports !== 'undefined') {
+            await PDFReports.init();
+        }
     },
 
     // ==========================================

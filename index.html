@@ -20,11 +20,22 @@
     <!-- Styles -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/innovations.css">
+    <link rel="stylesheet" href="css/quick-add.css">
+    <link rel="stylesheet" href="css/smart-alerts.css">
+    <link rel="stylesheet" href="css/dark-mode.css">
+    <link rel="stylesheet" href="css/charts.css">
+    <link rel="stylesheet" href="css/health-score.css">
+    <link rel="stylesheet" href="css/csv-import.css">
+    <link rel="stylesheet" href="css/pdf-reports.css">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js v4 pour Graphiques Dashboard -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 </head>
 <body>
     <!-- ===== ÉCRAN DE CONNEXION (LOGIN) ===== -->
@@ -223,6 +234,14 @@
                     <span class="nav-text">Utilisateurs</span>
                 </a>
                 
+                <a class="nav-item" data-page="reports" id="menu-reports">
+                    <span class="nav-icon">📄</span>
+                    <span class="nav-text">Rapports PDF</span>
+                </a>
+                <a class="nav-item" data-page="import-csv" id="menu-import-csv">
+                    <span class="nav-icon">📥</span>
+                    <span class="nav-text">Import CSV</span>
+                </a>
                 <a class="nav-item" data-page="audit-log" id="menu-audit" style="display: none;">
                     <span class="nav-icon">📋</span>
                     <span class="nav-text">Journal d'Audit</span>
@@ -350,6 +369,171 @@
                                 <div class="kpi-icon blue">📅</div>
                             </div>
                             <div class="kpi-value">0</div>
+                        </div>
+                    </div>
+                    
+                    <!-- ===== SCORE SANTÉ FINANCIÈRE v3.0 ===== -->
+                    <div class="health-score-section" id="health-score-section">
+                        <!-- Score Global -->
+                        <div class="health-score-main">
+                            <div class="health-score-card" id="health-score-global">
+                                <div class="health-score-header">
+                                    <h4 class="health-score-title">🏥 Santé Financière Globale</h4>
+                                    <span class="health-score-period" id="health-period">Mois en cours</span>
+                                </div>
+                                <div class="health-score-gauge">
+                                    <svg class="gauge-svg" viewBox="0 0 200 120">
+                                        <!-- Arc de fond -->
+                                        <path class="gauge-bg" d="M 20 100 A 80 80 0 0 1 180 100" 
+                                              fill="none" stroke="#E5E7EB" stroke-width="16" stroke-linecap="round"/>
+                                        <!-- Arc de valeur -->
+                                        <path class="gauge-fill" id="gauge-arc" 
+                                              d="M 20 100 A 80 80 0 0 1 180 100" 
+                                              fill="none" stroke="#0A6E32" stroke-width="16" stroke-linecap="round"
+                                              stroke-dasharray="251.2" stroke-dashoffset="125.6"/>
+                                        <!-- Aiguille -->
+                                        <polygon class="gauge-needle" id="gauge-needle" 
+                                                 points="100,100 96,30 104,30" fill="#1F2937"/>
+                                        <circle cx="100" cy="100" r="8" fill="#1F2937"/>
+                                    </svg>
+                                    <div class="gauge-value">
+                                        <span class="gauge-number" id="global-score-value">--</span>
+                                        <span class="gauge-label">/ 100</span>
+                                    </div>
+                                </div>
+                                <div class="health-score-status" id="global-score-status">
+                                    <span class="status-icon">⏳</span>
+                                    <span class="status-text">Calcul en cours...</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Détails par Catégorie -->
+                            <div class="health-metrics-grid">
+                                <div class="metric-card" id="metric-rentabilite">
+                                    <div class="metric-icon">💹</div>
+                                    <div class="metric-info">
+                                        <span class="metric-label">Rentabilité</span>
+                                        <span class="metric-value" id="score-rentabilite">--</span>
+                                    </div>
+                                    <div class="metric-bar">
+                                        <div class="metric-bar-fill" id="bar-rentabilite"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="metric-card" id="metric-liquidite">
+                                    <div class="metric-icon">💧</div>
+                                    <div class="metric-info">
+                                        <span class="metric-label">Liquidité</span>
+                                        <span class="metric-value" id="score-liquidite">--</span>
+                                    </div>
+                                    <div class="metric-bar">
+                                        <div class="metric-bar-fill" id="bar-liquidite"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="metric-card" id="metric-croissance">
+                                    <div class="metric-icon">📈</div>
+                                    <div class="metric-info">
+                                        <span class="metric-label">Croissance</span>
+                                        <span class="metric-value" id="score-croissance">--</span>
+                                    </div>
+                                    <div class="metric-bar">
+                                        <div class="metric-bar-fill" id="bar-croissance"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="metric-card" id="metric-dettes">
+                                    <div class="metric-icon">📋</div>
+                                    <div class="metric-info">
+                                        <span class="metric-label">Gestion Dettes</span>
+                                        <span class="metric-value" id="score-dettes">--</span>
+                                    </div>
+                                    <div class="metric-bar">
+                                        <div class="metric-bar-fill" id="bar-dettes"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="metric-card" id="metric-regularite">
+                                    <div class="metric-icon">📅</div>
+                                    <div class="metric-info">
+                                        <span class="metric-label">Régularité</span>
+                                        <span class="metric-value" id="score-regularite">--</span>
+                                    </div>
+                                    <div class="metric-bar">
+                                        <div class="metric-bar-fill" id="bar-regularite"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Scores par Pharmacie -->
+                        <div class="health-sites-grid" id="health-sites-container">
+                            <!-- Généré dynamiquement par JS -->
+                            <div class="loading-placeholder">
+                                <div class="spinner-small"></div>
+                                <span>Chargement des scores par site...</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- ===== GRAPHIQUES INTERACTIFS v3.0 ===== -->
+                    <div class="charts-grid" id="dashboard-charts">
+                        <!-- Graphique 1: Tendance des Revenus (Ligne) -->
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h4 class="chart-title">📈 Tendance des Revenus</h4>
+                                <div class="chart-controls">
+                                    <select id="chart-revenus-periode" class="chart-select" onchange="DashboardCharts.updatePeriode()">
+                                        <option value="7">7 derniers jours</option>
+                                        <option value="14">14 derniers jours</option>
+                                        <option value="30" selected>30 derniers jours</option>
+                                        <option value="90">3 mois</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="chart-revenus-tendance"></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- Graphique 2: Répartition Dépenses (Camembert/Doughnut) -->
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h4 class="chart-title">📊 Répartition des Dépenses</h4>
+                                <div class="chart-legend-custom" id="chart-depenses-legend"></div>
+                            </div>
+                            <div class="chart-container chart-container-pie">
+                                <canvas id="chart-depenses-repartition"></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- Graphique 3: Comparaison par Site (Barres) -->
+                        <div class="chart-card chart-card-wide">
+                            <div class="chart-header">
+                                <h4 class="chart-title">🏥 Performance par Site</h4>
+                                <div class="chart-controls">
+                                    <button class="chart-btn active" data-metric="versements" onclick="DashboardCharts.changeMetric(this)">Versements</button>
+                                    <button class="chart-btn" data-metric="depenses" onclick="DashboardCharts.changeMetric(this)">Dépenses</button>
+                                    <button class="chart-btn" data-metric="balance" onclick="DashboardCharts.changeMetric(this)">Balance</button>
+                                </div>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="chart-sites-comparaison"></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- Graphique 4: Évolution Mensuelle (Aire) -->
+                        <div class="chart-card chart-card-wide">
+                            <div class="chart-header">
+                                <h4 class="chart-title">📅 Évolution Mensuelle</h4>
+                                <div class="chart-stats" id="chart-evolution-stats">
+                                    <span class="chart-stat-item"><strong>Moyenne journalière:</strong> <span id="stat-moyenne-jour">0 FC</span></span>
+                                    <span class="chart-stat-item"><strong>Croissance:</strong> <span id="stat-croissance">0%</span></span>
+                                </div>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="chart-evolution-mensuelle"></canvas>
+                            </div>
                         </div>
                     </div>
                     
@@ -1124,6 +1308,295 @@
                 </section>
                 
                 <!-- ========================================== -->
+                <!-- PAGE: RAPPORTS PDF v3.0                    -->
+                <!-- ========================================== -->
+                <section class="page-view" id="page-reports">
+                    <div class="reports-page">
+                        <div class="reports-header">
+                            <h3 class="reports-title">📄 Rapports Professionnels</h3>
+                        </div>
+                        
+                        <!-- Options de Génération -->
+                        <div class="report-options-card">
+                            <h4 style="margin-bottom: 20px; color: var(--gray-800);">Configuration du Rapport</h4>
+                            
+                            <div class="options-grid">
+                                <div class="option-group">
+                                    <label>Pharmacie</label>
+                                    <select id="report-pharmacie-filter" class="form-select">
+                                        <option value="all">Toutes les pharmacies</option>
+                                    </select>
+                                </div>
+                                <div class="option-group">
+                                    <label>Mois</label>
+                                    <select id="report-mois-filter" class="form-select"></select>
+                                </div>
+                                <div class="option-group">
+                                    <label>Année</label>
+                                    <select id="report-annee-filter" class="form-select"></select>
+                                </div>
+                            </div>
+                            
+                            <!-- Types de Rapport -->
+                            <h5 style="margin: 24px 0 16px; color: var(--gray-700);">Type de Rapport</h5>
+                            <div class="report-types">
+                                <div class="report-type-card selected" data-type="mensuel">
+                                    <span class="report-type-check">✓</span>
+                                    <div class="report-type-header">
+                                        <div class="report-type-icon">📅</div>
+                                        <div class="report-type-info">
+                                            <h4>Rapport Mensuel</h4>
+                                            <p>Résumé complet du mois avec KPIs et graphiques</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="report-type-card" data-type="trimestriel">
+                                    <span class="report-type-check">✓</span>
+                                    <div class="report-type-header">
+                                        <div class="report-type-icon">📊</div>
+                                        <div class="report-type-info">
+                                            <h4>Rapport Trimestriel</h4>
+                                            <p>Analyse des tendances sur 3 mois</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="report-type-card" data-type="annuel">
+                                    <span class="report-type-check">✓</span>
+                                    <div class="report-type-header">
+                                        <div class="report-type-icon">🏆</div>
+                                        <div class="report-type-info">
+                                            <h4>Bilan Annuel</h4>
+                                            <p>Bilan financier complet de l'année</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="report-type-card" data-type="site">
+                                    <span class="report-type-check">✓</span>
+                                    <div class="report-type-header">
+                                        <div class="report-type-icon">🏥</div>
+                                        <div class="report-type-info">
+                                            <h4>Rapport par Site</h4>
+                                            <p>Focus détaillé sur une pharmacie spécifique</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Actions -->
+                            <div class="report-actions">
+                                <button class="btn-preview-report" id="btn-preview-report">
+                                    👁️ Aperçu
+                                </button>
+                                <button class="btn-generate-pdf" id="btn-generate-pdf">
+                                    📥 Générer le PDF
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Aperçu du Rapport -->
+                        <div class="report-preview-container" id="report-preview-container">
+                            <div class="preview-toolbar">
+                                <span class="preview-toolbar-title">📄 Aperçu du Rapport</span>
+                                <div class="preview-toolbar-actions">
+                                    <button class="btn-preview-action" id="btn-print-pdf">
+                                        🖨️ Imprimer / PDF
+                                    </button>
+                                    <button class="btn-preview-action" id="btn-close-preview">
+                                        ✕ Fermer
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="report-preview-content" id="report-preview-content">
+                                <!-- Contenu généré dynamiquement -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- ========================================== -->
+                <!-- PAGE: IMPORTATION CSV v3.0                 -->
+                <!-- ========================================== -->
+                <section class="page-view" id="page-import-csv">
+                    <div class="import-page">
+                        <h3 style="margin-bottom: 24px; display: flex; align-items: center; gap: 10px;">
+                            📥 Importation Massive de Données
+                        </h3>
+                        
+                        <!-- Zone de Dépôt Fichier -->
+                        <div class="dropzone-container">
+                            <div class="dropzone" id="csv-dropzone">
+                                <input type="file" id="csv-file-input" accept=".csv,.tsv,.txt" class="dropzone-input">
+                                <div class="dropzone-icon">📁</div>
+                                <div class="dropzone-title">Glissez votre fichier CSV ici</div>
+                                <div class="dropzone-subtitle">ou cliquez pour parcourir vos fichiers</div>
+                                <div class="dropzone-formats">
+                                    <span class="format-badge"><span>.CSV</span> Virgule</span>
+                                    <span class="format-badge"><span>.TSV</span> Tabulation</span>
+                                    <span class="format-badge"><span>10 Mo</span> Max</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Info fichier sélectionné -->
+                            <div class="file-info" id="file-info">
+                                <div class="file-info-icon">📄</div>
+                                <div class="file-info-details">
+                                    <div class="file-info-name">fichier.csv</div>
+                                    <div class="file-info-meta">125 KB • 150 lignes</div>
+                                </div>
+                                <button class="file-info-remove" onclick="CSVImport.reset()">✕ Supprimer</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Type d'Import -->
+                        <div class="import-options">
+                            <div class="option-card" data-type="versements">
+                                <div class="option-header">
+                                    <div class="option-icon">💰</div>
+                                    <h4 class="option-title">Versements</h4>
+                                </div>
+                                <p class="option-description">Importer les versements quotidiens des pharmacies avec montants FC/USD.</p>
+                                <div class="option-fields">
+                                    <div class="option-fields-title">Champs requis</div>
+                                    <span class="field-tag">date</span>
+                                    <span class="field-tag">pharmacie</span>
+                                    <span class="field-tag">montant_fc</span>
+                                    <span class="field-tag">montant_usd (opt.)</span>
+                                </div>
+                            </div>
+                            
+                            <div class="option-card" data-type="depenses">
+                                <div class="option-header">
+                                    <div class="option-icon">📤</div>
+                                    <h4 class="option-title">Dépenses</h4>
+                                </div>
+                                <p class="option-description">Importer les dépenses par catégorie (salaires, loyer, électricité, etc.).</p>
+                                <div class="option-fields">
+                                    <div class="option-fields-title">Champs requis</div>
+                                    <span class="field-tag">date</span>
+                                    <span class="field-tag">categorie</span>
+                                    <span class="field-tag">montant</span>
+                                    <span class="field-tag">pharmacie (opt.)</span>
+                                </div>
+                            </div>
+                            
+                            <div class="option-card" data-type="rapports">
+                                <div class="option-header">
+                                    <div class="option-icon">📝</div>
+                                    <h4 class="option-title">Rapports Journaliers</h4>
+                                </div>
+                                <p class="option-description">Importer les rapports complets de ventes journalières par site.</p>
+                                <div class="option-fields">
+                                    <div class="option-fields-title">Champs requis</div>
+                                    <span class="field-tag">date</span>
+                                    <span class="field-tag">pharmacie</span>
+                                    <span class="field-tag">dollars</span>
+                                    <span class="field-tag">francs</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Aperçu des Données -->
+                        <div class="preview-section" id="preview-section" style="display: none;">
+                            <div class="preview-header">
+                                <h4 class="preview-title">👁️ Aperçu des Données</h4>
+                                <div class="preview-stats">
+                                    <span class="preview-stat">
+                                        <span class="preview-stat-label">Total:</span>
+                                        <span class="preview-stat-value" id="preview-total">0</span> lignes
+                                    </span>
+                                    <span class="preview-stat">
+                                        <span class="preview-stat-label">Colonnes:</span>
+                                        <span class="preview-stat-value" id="preview-columns">0</span>
+                                    </span>
+                                    <span class="preview-stat">
+                                        <span class="preview-stat-label">Affichage:</span>
+                                        <span class="preview-stat-value" id="preview-showing">0</span> premières
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="preview-table-wrapper" id="preview-table-wrapper"></div>
+                        </div>
+                        
+                        <!-- Erreurs de Validation -->
+                        <div class="validation-errors" id="validation-errors">
+                            <div class="errors-header">
+                                <span class="errors-title">⚠️ Erreurs de Validation</span>
+                                <span class="errors-count" id="errors-count">0</span>
+                            </div>
+                            <div class="errors-list" id="errors-list"></div>
+                        </div>
+                        
+                        <!-- Progression Import -->
+                        <div class="import-progress" id="import-progress">
+                            <div class="progress-card">
+                                <div class="progress-icon">⏳</div>
+                                <div class="progress-title">Importation en cours...</div>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar-fill" id="progress-bar-fill"></div>
+                                </div>
+                                <div class="progress-text" id="progress-text">Préparation...</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Résultat Import -->
+                        <div class="import-result" id="import-result">
+                            <div class="result-card">
+                                <div class="result-icon">✅</div>
+                                <div class="result-title">Importation Terminée !</div>
+                                <div class="result-stats">
+                                    <div class="result-stat">
+                                        <span class="result-stat-value" id="result-imported">0</span>
+                                        <span class="result-stat-label">Importés</span>
+                                    </div>
+                                    <div class="result-stat">
+                                        <span class="result-stat-value" style="color: #C62828;" id="result-failed">0</span>
+                                        <span class="result-stat-label">Échecs</span>
+                                    </div>
+                                    <div class="result-stat">
+                                        <span class="result-stat-value" id="result-total">0</span>
+                                        <span class="result-stat-label">Total</span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary" onclick="CSVImport.reset()">
+                                    Nouvel Import
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Actions -->
+                        <div class="import-actions" id="import-actions">
+                            <div class="import-actions-left">
+                                <button class="btn-import-secondary" onclick="CSVImport.reset()">
+                                    🗑️ Réinitialiser
+                                </button>
+                            </div>
+                            <div class="import-actions-right">
+                                <button class="btn-import-primary" id="btn-import-csv" disabled>
+                                    <span>↑</span> Importer
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Template Download -->
+                        <div class="template-section">
+                            <div class="template-info">
+                                <div class="template-icon">📋</div>
+                                <div class="template-text">
+                                    <h4>Besoin d'un modèle ?</h4>
+                                    <p>Téléchargez un template CSV pré-formaté pour faciliter l'import.</p>
+                                </div>
+                            </div>
+                            <button class="btn-template" id="btn-download-template">
+                                ⬇️ Télécharger Template
+                            </button>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- ========================================== -->
                 <!-- PAGE: JOURNAL D'AUDIT                      -->
                 <!-- ========================================== -->
                 <section class="page-view" id="page-audit-log">
@@ -1255,8 +1728,19 @@
     <script src="js/calculations.js"></script>
     <script src="js/export.js"></script>
     <script src="js/utils.js"></script>
+    <!-- Dashboard Charts v3.0 -->
+    <script src="js/dashboard-charts.js"></script>
+    <!-- Health Score v3.0 -->
+    <script src="js/health-score.js"></script>
+    <!-- CSV Import v3.0 -->
+    <script src="js/csv-import.js"></script>
+    <!-- PDF Reports v3.0 -->
+    <script src="js/pdf-reports.js"></script>
     <script src="js/app.js"></script>
     <script src="js/innovations.js"></script>
+    <script src="js/quick-add.js"></script>
+    <script src="js/smart-alerts.js"></script>
+    <script src="js/dark-mode.js"></script>
     
     <!-- Service Worker Registration -->
     <script>
