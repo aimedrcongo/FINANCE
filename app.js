@@ -1,5 +1,6 @@
 /**
  * DivFinance Pro v3.2 - Main Application Logic
+ * © 2026 LA DIVINE Health Care - Professional Financial Management
  * Complete data management, calculations, and UI functionality
  */
 
@@ -53,6 +54,10 @@ class DivFinanceApp {
     init() {
         this.initStorage();
         this.loadSettings();
+        this.initNavigation();  // ⚡ Système de navigation
+        this.initDashboard();   // ⚡ Dashboard KPIs
+        this.updateUserInfo();  // ⚡ Info utilisateur
+        this.setCurrentDate();  // ⚡ Date actuelle
     }
 
     /**
@@ -961,6 +966,629 @@ class DivFinanceApp {
             totalVersementsUsd: versements.reduce((sum, v) => sum + v.montantUsd, 0),
             totalDettesActives: dettes.filter(d => d.montantRestant > 0).reduce((sum, d) => sum + d.montantRestant, 0)
         };
+    }
+
+    // ============================================
+    // 🎯 NAVIGATION SYSTEM - PROFESSIONNEL
+    // ============================================
+
+    /**
+     * Initialize navigation system
+     * Attache les event listeners aux liens de navigation
+     */
+    initNavigation() {
+        // Attendre que le DOM soit prêt
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => this.setupNavigation());
+        } else {
+            this.setupNavigation();
+        }
+    }
+
+    /**
+     * Setup navigation event listeners
+     */
+    setupNavigation() {
+        // Récupérer tous les liens de navigation avec data-panel
+        const navLinks = document.querySelectorAll('.nav-link[data-panel]');
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const panelId = link.getAttribute('data-panel');
+                if (panelId) {
+                    this.showPanel(panelId);
+                    this.setActiveNav(link);
+                }
+            });
+        });
+
+        // Toggle sidebar pour mobile
+        const toggleBtn = document.getElementById('toggleSidebar');
+        const sidebar = document.getElementById('sidebar');
+        
+        if (toggleBtn && sidebar) {
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('sidebar-open');
+                sidebar.classList.toggle('sidebar-closed');
+            });
+        }
+
+        console.log('✅ Navigation initialisée');
+    }
+
+    /**
+     * Afficher un panneau spécifique
+     * @param {string} panelId - ID du panneau à afficher (ex: 'dashboard', 'rapport-journalier')
+     */
+    showPanel(panelId) {
+        // Masquer tous les panneaux
+        const allPanels = document.querySelectorAll('.panel-content');
+        allPanels.forEach(panel => {
+            panel.style.display = 'none';
+            panel.classList.remove('active');
+        });
+
+        // Afficher le panneau cible
+        const targetPanel = document.getElementById(`panel-${panelId}`);
+        if (targetPanel) {
+            targetPanel.style.display = 'block';
+            targetPanel.classList.add('active');
+            
+            // Charger les données spécifiques au panneau
+            this.loadPanelData(panelId);
+            
+            console.log(`📊 Panneau affiché: ${panelId}`);
+        } else {
+            console.error(`❌ Panneau non trouvé: panel-${panelId}`);
+        }
+    }
+
+    /**
+     * Définir le lien de navigation actif
+     * @param {HTMLElement} activeLink - Lien cliqué
+     */
+    setActiveNav(activeLink) {
+        // Retirer active de tous les liens
+        const allLinks = document.querySelectorAll('.nav-link');
+        allLinks.forEach(link => {
+            link.classList.remove('active');
+        });
+
+        // Ajouter active au lien cliqué
+        if (activeLink) {
+            activeLink.classList.add('active');
+        }
+    }
+
+    /**
+     * Charger les données spécifiques selon le panneau
+     * @param {string} panelId - ID du panneau
+     */
+    loadPanelData(panelId) {
+        switch(panelId) {
+            case 'dashboard':
+                this.refreshDashboard();
+                break;
+            case 'pharmacies':
+                this.loadPharmaciesList();
+                break;
+            case 'rapport-journalier':
+                this.loadRapportsJournaliers();
+                this.populatePharmacySelects();
+                break;
+            case 'depenses':
+                this.loadDepensesList();
+                this.populatePharmacySelects();
+                break;
+            case 'livre-comptes':
+                this.loadLivreComptes();
+                break;
+            case 'dettes-fournisseurs':
+                this.loadDettesFournisseurs();
+                break;
+            case 'balance-mensuelle':
+                this.loadBalanceMensuelle();
+                break;
+            case 'exports':
+                this.initExports();
+                break;
+            case 'parametres':
+                this.loadParametres();
+                break;
+        }
+    }
+
+    // ============================================
+    // 🎨 UI & DASHBOARD UPDATES
+    // ============================================
+
+    /**
+     * Mettre à jour les infos utilisateur dans la sidebar
+     */
+    updateUserInfo() {
+        const user = JSON.parse(localStorage.getItem('divfinance_current_user') || 'null');
+        if (user) {
+            const userNameEl = document.getElementById('userName');
+            const userRoleEl = document.getElementById('userRole');
+            const userAvatarEl = document.getElementById('userAvatar');
+
+            if (userNameEl) userNameEl.textContent = user.fullName || user.username;
+            if (userRoleEl) userRoleEl.textContent = this.getRoleLabel(user.role);
+            if (userAvatarEl) userAvatarEl.textContent = (user.fullName || user.username).substring(0, 2).toUpperCase();
+
+            // Afficher/masquer éléments selon le rôle
+            this.updateUIForRole(user.role);
+        }
+    }
+
+    /**
+     * Obtenir le label du rôle en français
+     */
+    getRoleLabel(role) {
+        const labels = {
+            'super_admin_tech': 'Super Admin Tech',
+            'super_admin_finance': 'Directeur Finance',
+            'admin_pharmacie': 'Admin Pharmacie',
+            'comptable': 'Comptable',
+            'caissier': 'Caissier',
+            'consultant': 'Consultant'
+        };
+        return labels[role] || role;
+    }
+
+    /**
+     * Adapter l'interface selon le rôle
+     */
+    updateUIForRole(role) {
+        const adminItem = document.querySelector('.nav-item-admin');
+        const settingsItem = document.querySelector('.nav-item-settings');
+
+        // Super Admin Tech voit l'administration
+        if (adminItem) {
+            adminItem.style.display = (role === 'super_admin_tech') ? 'block' : 'none';
+        }
+
+        // Paramètres visibles pour Super Admins
+        if (settingsItem) {
+            settingsItem.style.display = ['super_admin_tech', 'super_admin_finance'].includes(role) ? 'block' : 'none';
+        }
+    }
+
+    /**
+     * Définir la date actuelle dans le header
+     */
+    setCurrentDate() {
+        const dateEl = document.getElementById('currentDate');
+        if (dateEl) {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            dateEl.textContent = new Date().toLocaleDateString('fr-FR', options);
+        }
+    }
+
+    /**
+     * Initialiser le Dashboard avec les KPIs
+     */
+    initDashboard() {
+        this.refreshDashboard();
+        this.initMonthSelector();
+    }
+
+    /**
+     * Rafraîchir les KPIs du Dashboard
+     */
+    refreshDashboard() {
+        const stats = this.getSummaryStats();
+        const rapports = this.getRapportsJournaliers();
+        const depenses = this.getDepenses();
+
+        // Calculs du jour
+        const today = new Date().toISOString().split('T')[0];
+        const todayRapports = rapports.filter(r => r.date === today);
+        const todayDepenses = depenses.filter(d => d.date === today);
+
+        const ventesJour = todayRapports.reduce((sum, r) => sum + (r.totalVentesUsd || 0), 0);
+        const depensesJour = todayDepenses.reduce((sum, d) => sum + (d.totalite || 0), 0);
+
+        // Mise à jour des KPIs
+        this.updateKPI('kpiVentesJour', this.formatCurrency(ventesJour));
+        this.updateKPI('kpiDepensesJour', this.formatCurrency(depensesJour));
+        this.updateKPI('kpiSoldeCaisse', this.formatCurrency(ventesJour - depensesJour));
+        this.updateKPI('kpiEcartGlobal', this.formatCurrency(0));
+        this.updateKPI('kpiDettesActives', stats.totalDettesActives.toString());
+        this.updateKPI('kpiPharmaciesActives', `${this.getActivePharmaciesCount()} / ${this.getTotalPharmaciesCount()}`);
+        this.updateKPI('kpiRapportsAujourdhui', todayRapports.length.toString());
+        this.updateKPI('kpiDettesRetard', this.getDettesEnRetard().toString());
+
+        // Résumé mensuel
+        const moisVentes = rapports.reduce((sum, r) => sum + (r.totalVentesUsd || 0), 0);
+        const moisDepenses = depenses.reduce((sum, d) => sum + (d.totalite || 0), 0);
+        
+        this.updateKPI('moisVentes', this.formatCurrency(moisVentes));
+        this.updateKPI('moisDepenses', this.formatCurrency(moisDepenses));
+        this.updateKPI('moisBenefice', this.formatCurrency(moisVentes - moisDepenses));
+
+        // Alertes
+        this.updateAlertes();
+    }
+
+    /**
+     * Mettre à jour un élément KPI
+     */
+    updateKPI(elementId, value) {
+        const el = document.getElementById(elementId);
+        if (el) el.textContent = value;
+    }
+
+    /**
+     * Initialiser le sélecteur de mois
+     */
+    initMonthSelector() {
+        const selector = document.getElementById('monthSelector');
+        if (!selector) return;
+
+        const months = [
+            'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+            'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+        ];
+        const currentMonth = new Date().getMonth();
+
+        selector.innerHTML = '';
+        months.forEach((month, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = month + ' 2026';
+            option.selected = index === currentMonth;
+            selector.appendChild(option);
+        });
+    }
+
+    /**
+     * Mettre à jour la section alertes
+     */
+    updateAlertes() {
+        const alertsList = document.getElementById('alertsList');
+        if (!alertsList) return;
+
+        const alertes = [];
+        
+        // Vérifier les dettes en retard
+        const dettesRetard = this.getDettesEnRetard();
+        if (dettesRetard > 0) {
+            alertes.push({
+                type: 'warning',
+                icon: 'bi-exclamation-triangle',
+                title: `${dettesRetard} dette(s) en retard`,
+                desc: 'Certaines échéances sont dépassées'
+            });
+        }
+
+        // Vérifier l'écart global
+        const ecartEl = document.getElementById('kpiEcartGlobal');
+        if (ecartEl && parseFloat(ecartEl.textContent.replace(/[^0-9.-]/g, '')) > 1000000) {
+            alertes.push({
+                type: 'warning',
+                icon: 'bi-exclamation-triangle',
+                title: 'Écart important détecté',
+                desc: "L'écart global dépasse le seuil normal"
+            });
+        }
+
+        if (alertes.length === 0) {
+            alertsList.innerHTML = `
+                <div class="empty-state py-4">
+                    <i class="bi bi-check-circle text-success" style="font-size: 2rem;"></i>
+                    <h4 class="mt-2">Tout est en ordre</h4>
+                    <p class="text-muted mb-0">Aucune alerte active</p>
+                </div>
+            `;
+        } else {
+            alertsList.innerHTML = alertes.map(a => `
+                <div class="flex items-start gap-3 p-3 bg-${a.type === 'danger' ? 'red' : 'orange'}-50 border border-${a.type === 'danger' ? 'red' : 'orange'}-200 rounded-lg mb-2">
+                    <i class="bi ${a.icon} text-${a.type === 'danger' ? 'danger' : 'warning'} flex-shrink-0 mt-0.5"></i>
+                    <div>
+                        <p class="font-medium text-${a.type === 'danger' ? 'red' : 'orange'}-800 mb-1">${a.title}</p>
+                        <p class="text-sm text-${a.type === 'danger' ? 'red' : 'orange'}-600 mb-0">${a.desc}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+    }
+
+    /**
+     * Compter les pharmacies actives
+     */
+    getActivePharmaciesCount() {
+        const pharmacies = JSON.parse(localStorage.getItem('divfinance_pharmacies') || '[]');
+        return pharmacies.filter(p => p.isActive !== false).length;
+    }
+
+    /**
+     * Compter le total des pharmacies
+     */
+    getTotalPharmaciesCount() {
+        const pharmacies = JSON.parse(localStorage.getItem('divfinance_pharmacies') || '[]');
+        return pharmacies.length || 9; // Default 9 si vide
+    }
+
+    /**
+     * Obtenir le nombre de dettes en retard
+     */
+    getDettesEnRetard() {
+        const dettes = this.getDettesFournisseurs();
+        const today = new Date();
+        return dettes.filter(d => {
+            if (d.dateEcheance && new Date(d.dateEcheance) < today && d.montantRestant > 0) {
+                return true;
+            }
+            return false;
+        }).length;
+    }
+
+    // ============================================
+    // 📊 DATA LOADING METHODS
+    // ============================================
+
+    /**
+     * Charger la liste des pharmacies
+     */
+    loadPharmaciesList() {
+        const grid = document.getElementById('pharmaciesGrid');
+        const countEl = document.getElementById('pharmaciesCount');
+        if (!grid) return;
+
+        let pharmacies = JSON.parse(localStorage.getItem('divfinance_pharmacies') || '[]');
+        
+        // Si aucune pharmacie, utiliser les défauts
+        if (pharmacies.length === 0) {
+            pharmacies = this.getDefaultPharmacies();
+            localStorage.setItem('divfinance_pharmacies', JSON.stringify(pharmacies));
+        }
+
+        const activeCount = pharmacies.filter(p => p.isActive !== false).length;
+        if (countEl) countEl.textContent = `${activeCount} pharmacies actives`;
+
+        grid.innerHTML = pharmacies.map(p => `
+            <div class="col-md-6 col-lg-4 mb-3">
+                <div class="content-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="kpi-icon-box ${p.isActive !== false ? 'teal' : 'gray'}">
+                                <i class="bi bi-building"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">${p.name}</h6>
+                                <small class="text-muted">${p.location || ''}</small>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <span class="badge ${p.isActive !== false ? 'bg-success' : 'bg-secondary'}">
+                                ${p.isActive !== false ? 'Active' : 'Inactive'}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    /**
+     * Obtenir les pharmacies par défaut
+     */
+    getDefaultPharmacies() {
+        return [
+            { id: 'de_la', name: 'DE LA REVOLUTION', location: 'Kinshasa', isActive: true },
+            { id: 'biayi', name: 'BIAYI', location: 'Haut-Katanga', isActive: true },
+            { id: 'hewa_bora_1', name: 'HEWA BORA 1', location: 'Lubumbashi', isActive: true },
+            { id: 'hewa_bora_2', name: 'HEWA BORA 2', location: 'Lubumbashi', isActive: true },
+            { id: 'kasai', name: 'KASAI', location: 'Kasaï-Oriental', isActive: true },
+            { id: 'kolwezi_1', name: 'KOLWEZI 1', location: 'Lualaba', isActive: true },
+            { id: 'kolwezi_2', name: 'KOLWEZI 2', location: 'Lualaba', isActive: true },
+            { id: 'pharmafrica', name: 'PHARMAFRICA', location: 'Kinshasa', isActive: true },
+            { id: 'depot', name: 'DEPOT', location: 'Entrepôt Central', isActive: true }
+        ];
+    }
+
+    /**
+     * Remplir les sélecteurs de pharmacie
+     */
+    populatePharmacySelects() {
+        const selects = ['rjPharmacie', 'depPharmacie'];
+        let pharmacies = JSON.parse(localStorage.getItem('divfinance_pharmacies') || '[]');
+        
+        if (pharmacies.length === 0) {
+            pharmacies = this.getDefaultPharmacies();
+        }
+
+        selects.forEach(selectId => {
+            const select = document.getElementById(selectId);
+            if (!select) return;
+
+            const currentValue = select.value;
+            select.innerHTML = '<option value="">Sélectionner une pharmacie...</option>';
+            
+            pharmacies.forEach(p => {
+                const option = document.createElement('option');
+                option.value = p.id;
+                option.textContent = p.name;
+                select.appendChild(option);
+            });
+
+            select.value = currentValue;
+        });
+    }
+
+    /**
+     * Charger les rapports journaliers
+     */
+    loadRapportsJournaliers() {
+        const tbody = document.getElementById('rapportsJournaliersTableBody');
+        if (!tbody) return;
+
+        const rapports = this.getRapportsJournaliers().slice(-50).reverse(); // 50 derniers
+
+        if (rapports.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted">Aucun rapport trouvé</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = rapports.map(r => `
+            <tr>
+                <td>${this.formatDate(r.date)}</td>
+                <td>${r.pharmacieName || '-'}</td>
+                <td class="text-success">${this.formatCurrency(r.totalVentesUsd)}</td>
+                <td class="text-danger">${this.formatNumber(r.totalDepenses)} FC</td>
+                <td class="text-primary">${this.formatCurrency(r.totalCahier)}</td>
+                <td class="text-info">${this.formatCurrency(r.totalSysteme)}</td>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary" onclick="divFinanceApp.viewRapport('${r.id}')">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    /**
+     * Charger la liste des dépenses
+     */
+    loadDepensesList() {
+        // Implémenter selon besoin
+        console.log('📝 Chargement des dépenses...');
+    }
+
+    /**
+     * Charger le livre de comptes
+     */
+    loadLivreComptes() {
+        console.log('📖 Chargement du livre de comptes...');
+        // Implémenter les onglets: Journal, Balance, Trésorerie, etc.
+    }
+
+    /**
+     * Charger les dettes fournisseurs
+     */
+    loadDettesFournisseurs() {
+        console.log('💳 Chargement des dettes fournisseurs...');
+    }
+
+    /**
+     * Charger la balance mensuelle
+     */
+    loadBalanceMensuelle() {
+        console.log('⚖️ Chargement de la balance mensuelle...');
+    }
+
+    /**
+     * Initialiser les exports
+     */
+    initExports() {
+        console.log('📤 Initialisation des exports...');
+    }
+
+    /**
+     * Charger les paramètres
+     */
+    loadParametres() {
+        console.log('⚙️ Chargement des paramètres...');
+    }
+
+    // ============================================
+    // 💰 CALCULATIONS HELPERS
+    // ============================================
+
+    /**
+     * Calculer les totaux du rapport journalier
+     */
+    calculateRJTotals() {
+        const venteUsd = parseFloat(document.getElementById('rjVenteUsd')?.value || 0);
+        const venteFc = parseFloat(document.getElementById('rjVenteFc')?.value || 0);
+        const emoneyEquity = parseFloat(document.getElementById('rjEmoneyEquity')?.value || 0);
+        const emoneyGga = parseFloat(document.getElementById('rjEmoneyGga')?.value || 0);
+        const emoneyTmb = parseFloat(document.getElementById('rjEmoneyTmb')?.value || 0);
+        const emoneyMoko = parseFloat(document.getElementById('rjEmoneyMoko')?.value || 0);
+        const depTransport = parseFloat(document.getElementById('rjDepenseTransport')?.value || 0);
+        const depAchats = parseFloat(document.getElementById('rjDepenseAchats')?.value || 0);
+        const depCarburant = parseFloat(document.getElementById('rjDepenseCarburant')?.value || 0);
+        const depAutres = parseFloat(document.getElementById('rjDepenseAutres')?.value || 0);
+
+        const rate = this.getConversionRate();
+
+        // Total E-Money
+        const totalEmoney = emoneyEquity + emoneyGga + emoneyTmb + emoneyMoko;
+        const totalEmoneyDisplay = document.getElementById('rjTotalEmoneyDisplay');
+        if (totalEmoneyDisplay) totalEmoneyDisplay.textContent = this.formatNumber(totalEmoney) + ' FC';
+
+        // Total Dépenses FC
+        const totalDepensesFc = depTransport + depAchats + depCarburant + depAutres;
+        const totalDepDisplay = document.getElementById('rjTotalDepensesDisplay');
+        if (totalDepDisplay) totalDepDisplay.textContent = this.formatNumber(totalDepensesFc) + ' FC';
+
+        // Total Ventes (convertir FC en USD)
+        const totalVentesUsd = venteUsd + (venteFc / rate);
+        const totalVentesDisplay = document.getElementById('rjTotalVentesDisplay');
+        if (totalVentesDisplay) totalVentesDisplay.textContent = '$' + totalVentesUsd.toFixed(2);
+
+        // Total Système
+        const totalSysteme = totalVentesUsd - (totalDepensesFc / rate) + (totalEmoney / rate);
+        const totalSystemeEl = document.getElementById('rjTotalSysteme');
+        if (totalSystemeEl) totalSystemeEl.value = '$' + totalSysteme.toFixed(2);
+    }
+
+    /**
+     * Calculer le total des dépenses
+     */
+    calculateDepTotal() {
+        const fields = ['depMoon', 'depUnique', 'depDivers', 'depTransportProduits', 
+                        'depEntretien', 'depDemandeFonds', 'depTransportAgents', 
+                        'depCarburant', 'depTravauxBoss', 'depTegermoTaxes', 
+                        'depSalaireFermiers', 'depPromed', 'depLoer', 'depKinMed', 
+                        'depCompteMoussa', 'depTravauxPhaDepot'];
+        
+        let total = 0;
+        fields.forEach(fieldId => {
+            const val = parseFloat(document.getElementById(fieldId)?.value || 0);
+            total += val;
+        });
+
+        const totalDisplay = document.getElementById('depTotalDisplay');
+        if (totalDisplay) totalDisplay.textContent = this.formatNumber(total) + ' FC';
+    }
+
+    // ============================================
+    // 🔄 FORMATAGE UTILITAIRES
+    // ============================================
+
+    /**
+     * Formater une devise
+     */
+    formatCurrency(amount) {
+        if (amount >= 1000000) {
+            return '$' + (amount / 1000000).toFixed(2) + 'M';
+        } else if (amount >= 1000) {
+            return '$' + amount.toLocaleString('fr-FR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        }
+        return '$' + amount.toFixed(2);
+    }
+
+    /**
+     * Formater un nombre
+     */
+    formatNumber(num) {
+        return num.toLocaleString('fr-FR');
+    }
+
+    /**
+     * Formater une date
+     */
+    formatDate(dateStr) {
+        if (!dateStr) return '-';
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('fr-FR', { 
+            day: '2-digit', 
+            month: '2-digit', 
+            year: 'numeric' 
+        });
     }
 }
 
