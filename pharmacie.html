@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DivFinance Pro v3.2 - Panel Pharmacie</title>
+    
+    <!-- Bootstrap 5.3.2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom Styles -->
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <i class="bi bi-shop"></i>
+                </div>
+                <div class="sidebar-brand">
+                    <h5 id="pharmacySidebarName">Ma Pharmacie</h5>
+                    <small>Panel Pharmacie</small>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section-title">Principal</div>
+                
+                <div class="nav-item">
+                    <a href="#" class="nav-link active" data-panel="dashboard">
+                        <i class="bi bi-speedometer2"></i>
+                        <span class="nav-link-text">Tableau de Bord</span>
+                    </a>
+                </div>
+
+                <div class="nav-section-title">Opérations</div>
+
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-panel="rapport-journalier">
+                        <i class="bi bi-journal-text"></i>
+                        <span class="nav-link-text">Rapport Journalier</span>
+                    </a>
+                </div>
+
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-panel="depenses">
+                        <i class="bi bi-receipt"></i>
+                        <span class="nav-link-text">Dépenses</span>
+                    </a>
+                </div>
+
+                <div class="nav-section-title">Comptabilité</div>
+
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-panel="mon-livre">
+                        <i class="bi bi-book"></i>
+                        <span class="nav-link-text">Mon Livre de Comptes</span>
+                    </a>
+                </div>
+
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-panel="versements">
+                        <i class="bi bi-cash-coin"></i>
+                        <span class="nav-link-text">Versements</span>
+                    </a>
+                </div>
+
+                <div class="nav-section-title">Outils</div>
+
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-panel="exports">
+                        <i class="bi bi-download"></i>
+                        <span class="nav-link-text">Exports</span>
+                    </a>
+                </div>
+
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-panel="parametres">
+                        <i class="bi bi-gear"></i>
+                        <span class="nav-link-text">Paramètres</span>
+                    </a>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar" id="userAvatar">PH</div>
+                    <div class="user-info">
+                        <div class="user-name" id="userName">Pharmacien</div>
+                        <div class="user-role" id="userRole">Admin Pharmacie</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="main-content">
+            <!-- TOP HEADER -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="toggle-sidebar" id="toggleSidebar" title="Toggle Sidebar">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <div class="page-title">
+                        <h1 id="pageTitle">Tableau de Bord</h1>
+                        <p id="currentDate"></p>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="header-btn" onclick="location.reload()" title="Rafraîchir">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </button>
+                    <button class="header-btn" onclick="divFinanceAuth.logout()" title="Déconnexion">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- PAGE CONTENT -->
+            <div class="page-content">
+                
+                <!-- ==================== PANEL: DASHBOARD ==================== -->
+                <section class="panel-content active" id="panel-dashboard">
+                    <!-- KPI Cards -->
+                    <div class="kpi-grid">
+                        <div class="kpi-card primary">
+                            <div class="kpi-header">
+                                <div class="kpi-icon green"><i class="bi bi-graph-up-arrow"></i></div>
+                                <div class="kpi-trend up"><i class="bi bi-arrow-up-short"></i>Aujourd'hui</div>
+                            </div>
+                            <div class="kpi-label">Ventes du Jour</div>
+                            <div class="kpi-value" id="phaKpiVentesJour">$0.00</div>
+                            <div class="kpi-subtext">USD + FC convertis</div>
+                        </div>
+
+                        <div class="kpi-card danger">
+                            <div class="kpi-header">
+                                <div class="kpi-icon red"><i class="bi bi-cart-dash"></i></div>
+                            </div>
+                            <div class="kpi-label">Dépenses du Jour</div>
+                            <div class="kpi-value" id="phaKpiDepensesJour">$0.00</div>
+                            <div class="kpi-subtext">Total des dépenses</div>
+                        </div>
+
+                        <div class="kpi-card success">
+                            <div class="kpi-header">
+                                <div class="kpi-icon green"><i class="bi bi-wallet2"></i></div>
+                            </div>
+                            <div class="kpi-label">Solde Caisse</div>
+                            <div class="kpi-value" id="phaKpiSoldeCaisse">$0.00</div>
+                            <div class="kpi-subtext">Total physique compté</div>
+                        </div>
+
+                        <div class="kpi-card info">
+                            <div class="kpi-header">
+                                <div class="kpi-icon blue"><i class="bi bi-file-earmark-text"></i></div>
+                            </div>
+                            <div class="kpi-label">Rapports ce Mois</div>
+                            <div class="kpi-value" id="phaKpiRapportsMois">0</div>
+                            <div class="kpi-subtext">Rapports envoyés</div>
+                        </div>
+                    </div>
+
+                    <!-- Monthly Summary -->
+                    <div class="row g-4 mt-1">
+                        <div class="col-lg-8">
+                            <div class="content-card">
+                                <div class="card-header">
+                                    <h5><i class="bi bi-calendar3"></i>Résumé Mensuel</h5>
+                                    <select class="form-select form-select-sm" style="width: auto;" id="phaMonthSelector" onchange="loadPharmaDashboard()">
+                                    </select>
+                                </div>
+                                <div class="card-body">
+                                    <div class="kpi-grid" style="grid-template-columns: repeat(3, 1fr);">
+                                        <div class="kpi-card primary" style="margin-bottom: 0;">
+                                            <div class="kpi-label">Total Ventes</div>
+                                            <div class="kpi-value" id="phaMoisVentes">$0.00</div>
+                                        </div>
+                                        <div class="kpi-card danger" style="margin-bottom: 0;">
+                                            <div class="kpi-label">Total Dépenses</div>
+                                            <div class="kpi-value" id="phaMoisDepenses">$0.00</div>
+                                        </div>
+                                        <div class="kpi-card success" style="margin-bottom: 0;">
+                                            <div class="kpi-label">Bénéfice Net</div>
+                                            <div class="kpi-value" id="phaMoisBenefice">$0.00</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="content-card">
+                                <div class="card-header">
+                                    <h5><i class="bi bi-lightning"></i>Actions Rapides</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-grid gap-2">
+                                        <button class="btn-primary-custom" onclick="showPanel('rapport-journalier')">
+                                            <i class="bi bi-plus-circle me-2"></i>Nouveau Rapport Journalier
+                                        </button>
+                                        <button class="btn-danger-custom" onclick="showPanel('depenses')">
+                                            <i class="bi bi-receipt me-2"></i>Nouvelle Dépense
+                                        </button>
+                                        <button class="btn-secondary-custom" style="background: #3b82f6; color: white; border: none;" onclick="showPanel('versements')">
+                                            <i class="bi bi-cash me-2"></i>Nouveau Versement
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Reports -->
+                    <div class="content-card mt-4">
+                        <div class="card-header">
+                            <h5><i class="bi bi-clock-history"></i>Rapports Récents</h5>
+                            <button class="btn btn-sm btn-outline-primary" onclick="showPanel('rapport-journalier')">Voir tout →</button>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Ventes ($)</th>
+                                            <th>Dépenses (FC)</th>
+                                            <th>Cahier ($)</th>
+                                            <th>Système ($)</th>
+                                            <th>Écart</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="phaRecentReportsBody">
+                                        <tr><td colspan="6" class="text-center py-4 text-muted">Aucun rapport récent</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== PANEL: RAPPORT JOURNALIER ==================== -->
+                <section class="panel-content" id="panel-rapport-journalier" style="display: none;">
+                    <div class="row g-4">
+                        <!-- Entry Form -->
+                        <div class="col-lg-5">
+                            <div class="content-card">
+                                <div class="card-header">
+                                    <h5><i class="bi bi-plus-circle"></i>Nouveau Rapport Journalier</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="rapportJournalierForm">
+                                        <div class="mb-3">
+                                            <label class="form-label">Date *</label>
+                                            <input type="date" class="form-control" id="rjDate" required>
+                                        </div>
+
+                                        <!-- VENTE JOURNALIERE -->
+                                        <div class="form-section">
+                                            <div class="form-section-title">
+                                                <i class="bi bi-cash-stack"></i>VENTE JOURNALIERE
+                                            </div>
+                                            <div class="row g-3">
+                                                <div class="col-6">
+                                                    <label class="form-label">Montant USD ($)</label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-text">$</span>
+                                                        <input type="number" class="form-control" id="rjVenteUsd" 
+                                                               step="0.01" min="0" placeholder="0.00" oninput="calculateRJTotals()">
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label">Montant FC</label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-text">FC</span>
+                                                        <input type="number" class="form-control" id="rjVenteFc" 
+                                                               step="1" min="0" placeholder="0" oninput="calculateRJTotals()">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mt-2 text-end">
+                                                <strong>Total Ventes: <span id="rjTotalVentesDisplay" class="text-primary-custom">$0.00</span></strong>
+                                            </div>
+                                        </div>
+
+                                        <!-- PAIEMENT E-MONEY -->
+                                        <div class="form-section">
+                                            <div class="form-section-title">
+                                                <i class="bi bi-phone"></i>PAIEMENT E-MONEY
+                                            </div>
+                                            <div class="row g-3">
+                                                <div class="col-6">
+                                                    <label class="form-label">Equity (FC)</label>
+                                                    <input type="number" class="form-control" id="rjEmoneyEquity" 
+                                                           step="1" min="0" value="0" oninput="calculateRJTotals()">
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label">GGA (FC)</label>
+                                                    <input type="number" class="form-control" id="rjEmoneyGga" 
+                                                           step="1" min="0" value="0" oninput="calculateRJTotals()">
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label">TMB (FC)</label>
+                                                    <input type="number" class="form-control" id="rjEmoneyTmb" 
+                                                           step="1" min="0" value="0" oninput="calculateRJTotals()">
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label">MOKO (FC)</label>
+                                                    <input type="number" class="form-control" id="rjEmoneyMoko" 
+                                                           step="1" min="0" value="0" oninput="calculateRJTotals()">
+                                                </div>
+                                            </div>
+                                            <div class="mt-2 text-end">
+                                                <strong>Total E-Money: <span id="rjTotalEmoneyDisplay" class="text-primary-custom">0 FC</span></strong>
+                                            </div>
+                                        </div>
+
+                                        <!-- DEPENSES -->
+                                        <div class="form-section">
+                                            <div class="form-section-title">
+                                                <i class="bi bi-receipt-cutoff"></i>DÉPENSES
+                                            </div>
+                                            <div class="row g-3">
+                                                <div class="col-6">
+                                                    <label class="form-label">Transport (FC)</label>
+                                                    <input type="number" class="form-control" id="rjDepenseTransport" 
+                                                           step="1" min="0" value="0" oninput="calculateRJTotals()">
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label">Achats Produits (FC)</label>
+                                                    <input type="number" class="form-control" id="rjDepenseAchats" 
+                                                           step="1" min="0" value="0" oninput="calculateRJTotals()">
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label">Carburant (FC)</label>
+                                                    <input type="number" class="form-control" id="rjDepenseCarburant" 
+                                                           step="1" min="0" value="0" oninput="calculateRJTotals()">
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label">Autres Dépenses (FC)</label>
+                                                    <input type="number" class="form-control" id="rjDepenseAutres" 
+                                                           step="1" min="0" value="0" oninput="calculateRJTotals()">
+                                                </div>
+                                            </div>
+                                            <div class="mt-2 text-end">
+                                                <strong>Total Dépenses: <span id="rjTotalDepensesDisplay" class="text-danger-custom">0 FC</span></strong>
+                                            </div>
+                                        </div>
+
+                                        <!-- TOTALS -->
+                                        <div class="form-section bg-light">
+                                            <div class="row g-3">
+                                                <div class="col-6">
+                                                    <label class="form-label">TOTAL CAHIER (Physique $)</label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-text">$</span>
+                                                        <input type="number" class="form-control fw-bold" id="rjTotalCahier" 
+                                                               step="0.01" min="0" placeholder="0.00">
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label">TOTAL SYSTÈME (Calculé $)</label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-text bg-primary text-white">$</span>
+                                                        <input type="text" class="form-control fw-bold bg-light" id="rjTotalSysteme" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Produit Expiré -->
+                                        <div class="form-check mt-3">
+                                            <input class="form-check-input" type="checkbox" id="rjProduitExpire">
+                                            <label class="form-check-label" for="rjProduitExpire">
+                                                <i class="bi bi-exclamation-triangle text-warning me-1"></i>Produit EXPIRE
+                                            </label>
+                                        </div>
+                                        <div class="row g-3 mt-2" id="produitExpireFields" style="display: none;">
+                                            <div class="col-12">
+                                                <label class="form-label">Montant Produit Expiré ($)</label>
+                                                <input type="number" class="form-control" id="rjProduitExpireMontant" 
+                                                       step="0.01" min="0" value="0">
+                                            </div>
+                                        </div>
+
+                                        <!-- Submit -->
+                                        <div class="mt-4">
+                                            <button type="submit" class="btn-primary-custom w-100">
+                                                <i class="bi bi-send"></i>Soumettre le Rapport au Directeur Finance
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reports Table -->
+                        <div class="col-lg-7">
+                            <div class="content-card">
+                                <div class="card-header">
+                                    <h5><i class="bi bi-table"></i>Mes Rapports</h5>
+                                    <div class="d-flex gap-2">
+                                        <input type="date" class="form-control form-control-sm" id="filterRjDateFrom" style="width: auto;">
+                                        <input type="date" class="form-control form-control-sm" id="filterRjDateTo" style="width: auto;">
+                                        <button class="btn btn-sm btn-outline-primary" onclick="loadRapportsJournaliers()"><i class="bi bi-filter"></i></button>
+                                    </div>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive" style="max-height: 550px; overflow-y: auto;">
+                                        <table class="data-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Ventes ($)</th>
+                                                    <th>E-Money</th>
+                                                    <th>Dépenses</th>
+                                                    <th>Cahier ($)</th>
+                                                    <th>Système ($)</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="rapportsJournaliersTableBody">
+                                                <tr><td colspan="7" class="text-center py-4 text-muted">Aucun rapport trouvé</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== PANEL: DEPENSES ==================== -->
+                <section class="panel-content" id="panel-depenses" style="display: none;">
+                    <div class="row g-4">
+                        <!-- Expense Form -->
+                        <div class="col-lg-5">
+                            <div class="content-card">
+                                <div class="card-header">
+                                    <h5><i class="bi bi-plus-circle"></i>Nouvelle Dépense</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="depenseForm">
+                                        <div class="mb-3">
+                                            <label class="form-label">Date *</label>
+                                            <input type="date" class="form-control" id="depDate" required>
+                                        </div>
+
+                                        <div class="form-section">
+                                            <div class="form-section-title">
+                                                <i class="bi bi-tags"></i>CATÉGORIES DE DÉPENSES
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="fw-600 fs-13 text-secondary mb-2">FOURNISSEURS</label>
+                                                <div class="row g-2">
+                                                    <div class="col-6">
+                                                        <label class="form-label fs-13">MOON</label>
+                                                        <input type="number" class="form-control form-control-sm" id="depMoon" step="1" min="0" value="0" oninput="calculateDepTotal()">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label class="form-label fs-13">UNIQUE</label>
+                                                        <input type="number" class="form-control form-control-sm" id="depUnique" step="1" min="0" value="0" oninput="calculateDepTotal()">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label class="form-label fs-13">PROMED</label>
+                                                        <input type="number" class="form-control form-control-sm" id="depPromed" step="1" min="0" value="0" oninput="calculateDepTotal()">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label class="form-label fs-13">LOER / KIN MED</label>
+                                                        <input type="number" class="form-control form-control-sm" id="depLoer" step="1" min="0" value="0" oninput="calculateDepTotal()">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="fw-600 fs-13 text-secondary mb-2">OPÉRATIONNEL</label>
+                                                <div class="row g-2">
+                                                    <div class="col-6">
+                                                        <label class="form-label fs-13">Transport</label>
+                                                        <input type="number" class="form-control form-control-sm" id="depTransportProduits" step="1" min="0" value="0" oninput="calculateDepTotal()">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label class="form-label fs-13">Carburant</label>
+                                                        <input type="number" class="form-control form-control-sm" id="depCarburant" step="1" min="0" value="0" oninput="calculateDepTotal()">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label class="form-label fs-13">Entretien Moto/Groupe</label>
+                                                        <input type="number" class="form-control form-control-sm" id="depEntretienMoto" step="1" min="0" value="0" oninput="calculateDepTotal()">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label class="form-label fs-13">Divers</label>
+                                                        <input type="number" class="form-control form-control-sm" id="depDivers" step="1" min="0" value="0" oninput="calculateDepTotal()">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="alert alert-primary d-flex justify-content-between align-items-center mb-3">
+                                            <span class="fw-bold">TOTALITÉ:</span>
+                                            <span class="fs-5 fw-bold text-danger" id="depTotaliteDisplay">0 FC</span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Description</label>
+                                            <textarea class="form-control" id="depDescription" rows="2" placeholder="Notes..."></textarea>
+                                        </div>
+
+                                        <button type="submit" class="btn-danger-custom w-100">
+                                            <i class="bi bi-save"></i>Enregistrer la Dépense
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Expenses Table -->
+                        <div class="col-lg-7">
+                            <div class="content-card">
+                                <div class="card-header">
+                                    <h5><i class="bi bi-table"></i>Mes Dépenses</h5>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive" style="max-height: 550px; overflow-y: auto;">
+                                        <table class="data-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Fournisseurs</th>
+                                                    <th>Transport</th>
+                                                    <th>Autres</th>
+                                                    <th>Totalité</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="depensesTableBody">
+                                                <tr><td colspan="6" class="text-center py-4 text-muted">Aucune dépense trouvée</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== PANEL: MON LIVRE ==================== -->
+                <section class="panel-content" id="panel-mon-livre" style="display: none;">
+                    <div class="content-card mb-4">
+                        <div class="card-header">
+                            <h5><i class="bi bi-book"></i>Mon Livre de Comptes</h5>
+                            <input type="month" class="form-control form-control-sm" id="livreMonthFilter" style="width: auto;" onchange="loadMonLivre()">
+                        </div>
+                        <div class="card-body">
+                            <div class="kpi-grid" style="grid-template-columns: repeat(4, 1fr);">
+                                <div class="kpi-card primary">
+                                    <div class="kpi-label">Total Ventes</div>
+                                    <div class="kpi-value" id="livreTotalVentes">$0.00</div>
+                                </div>
+                                <div class="kpi-card danger">
+                                    <div class="kpi-label">Total Dépenses</div>
+                                    <div class="kpi-value" id="livreTotalDepenses">$0.00</div>
+                                </div>
+                                <div class="kpi-card info">
+                                    <div class="kpi-label">Versements</div>
+                                    <div class="kpi-value" id="livreTotalVersements">$0.00</div>
+                                </div>
+                                <div class="kpi-card success">
+                                    <div class="kpi-label">Solde</div>
+                                    <div class="kpi-value" id="livreSolde">$0.00</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h5><i class="bi bi-table"></i>Détail des Opérations</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive" style="max-height: 450px; overflow-y: auto;">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th>Entrées ($)</th>
+                                            <th>Sorties ($)</th>
+                                            <th>Solde ($)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="monLivreTableBody">
+                                        <tr><td colspan="6" class="text-center py-4 text-muted">Sélectionnez un mois</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== PANEL: VERSEMENTS ==================== -->
+                <section class="panel-content" id="panel-versements" style="display: none;">
+                    <div class="row g-4">
+                        <div class="col-lg-5">
+                            <div class="content-card">
+                                <div class="card-header">
+                                    <h5><i class="bi bi-cash"></i>Nouveau Versement</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="versementForm">
+                                        <div class="mb-3">
+                                            <label class="form-label">Date *</label>
+                                            <input type="date" class="form-control" id="verDate" required>
+                                        </div>
+                                        
+                                        <div class="row g-3 mb-3">
+                                            <div class="col-6">
+                                                <label class="form-label">Montant USD ($)</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">$</span>
+                                                    <input type="number" class="form-control" id="verMontantUsd" step="0.01" min="0" value="0">
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="form-label">Montant FC</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">FC</span>
+                                                    <input type="number" class="form-control" id="verMontantFc" step="1" min="0" value="0">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Mode de Versement</label>
+                                            <select class="form-select" id="verMode">
+                                                <option value="especes">Espèces</option>
+                                                <option value="virement">Virement Bancaire</option>
+                                                <option value="mobile_money">Mobile Money</option>
+                                                <option value="cheque">Chèque</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Référence</label>
+                                            <input type="text" class="form-control" id="verReference" placeholder="N° de référence optionnel">
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Notes</label>
+                                            <textarea class="form-control" id="verNotes" rows="2" placeholder="Notes..."></textarea>
+                                        </div>
+
+                                        <button type="submit" class="btn-success w-100" style="background: linear-gradient(135deg, #10b981, #059669); border: none; color: white; padding: 12px; border-radius: 8px; font-weight: 600;">
+                                            <i class="bi bi-send"></i>Envoyer le Versement au Directeur Finance
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-7">
+                            <div class="content-card">
+                                <div class="card-header">
+                                    <h5><i class="bi bi-list-ul"></i>Mes Versements</h5>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+                                        <table class="data-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>USD</th>
+                                                    <th>FC</th>
+                                                    <th>Mode</th>
+                                                    <th>Référence</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="versementsTableBody">
+                                                <tr><td colspan="6" class="text-center py-4 text-muted">Aucun versement trouvé</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== PANEL: EXPORTS ==================== -->
+                <section class="panel-content" id="panel-exports" style="display: none;">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="content-card h-100">
+                                <div class="card-body text-center p-4">
+                                    <div class="kpi-icon green mx-auto mb-3" style="width: 64px; height: 64px; font-size: 28px;">
+                                        <i class="bi bi-filetype-csv"></i>
+                                    </div>
+                                    <h5 class="fw-bold">Mes Rapports Journaliers</h5>
+                                    <p class="text-muted small mb-3">Exporter tous mes rapports journaliers</p>
+                                    <button class="btn-primary-custom" onclick="exportMyReports()">
+                                        <i class="bi bi-download"></i>Exporter CSV
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="content-card h-100">
+                                <div class="card-body text-center p-4">
+                                    <div class="kpi-icon red mx-auto mb-3" style="width: 64px; height: 64px; font-size: 28px;">
+                                        <i class="bi bi-file-earmark-spreadsheet"></i>
+                                    </div>
+                                    <h5 class="fw-bold">Mes Dépenses</h5>
+                                    <p class="text-muted small mb-3">Exporter l'historique de mes dépenses</p>
+                                    <button class="btn-danger-custom" onclick="exportMyExpenses()">
+                                        <i class="bi bi-download"></i>Exporter CSV
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="content-card h-100">
+                                <div class="card-body text-center p-4">
+                                    <div class="kpi-icon blue mx-auto mb-3" style="width: 64px; height: 64px; font-size: 28px;">
+                                        <i class="bi bi-cash-coin"></i>
+                                    </div>
+                                    <h5 class="fw-bold">Mes Versements</h5>
+                                    <p class="text-muted small mb-3">Exporter mes versements effectués</p>
+                                    <button class="btn-secondary-custom" onclick="exportMyPayments()" style="background: #3b82f6; color: white; border: none;">
+                                        <i class="bi bi-download"></i>Exporter CSV
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="content-card h-100">
+                                <div class="card-body text-center p-4">
+                                    <div class="kpi-icon purple mx-auto mb-3" style="width: 64px; height: 64px; font-size: 28px;">
+                                        <i class="bi bi-printer"></i>
+                                    </div>
+                                    <h5 class="fw-bold">Impression</h5>
+                                    <p class="text-muted small mb-3">Imprimer avec mise en page optimisée</p>
+                                    <button class="btn-secondary-custom" onclick="window.print()" style="background: #8b5cf6; color: white; border: none;">
+                                        <i class="bi bi-printer"></i>Imprimer
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== PANEL: PARAMETRES ==================== -->
+                <section class="panel-content" id="panel-parametres" style="display: none;">
+                    <div class="row g-4">
+                        <div class="col-lg-6">
+                            <div class="content-card">
+                                <div class="card-header">
+                                    <h5><i class="bi bi-person-circle"></i>Mon Profil</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="text-center mb-4">
+                                        <div class="user-avatar mx-auto" style="width: 80px; height: 80px; font-size: 28px;" id="profileAvatar">PH</div>
+                                        <h5 class="mt-3" id="profileName">-</h5>
+                                        <p class="text-muted" id="profileRole">-</p>
+                                        <p class="text-muted small" id="profilePharmacy">-</p>
+                                    </div>
+                                    
+                                    <hr>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Taux de Conversion (FC/USD)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">1$ =</span>
+                                            <input type="number" class="form-control" id="settingConversionRate" value="2800" readonly>
+                                            <span class="input-group-text">FC</span>
+                                        </div>
+                                        <small class="text-muted">Défini par le Directeur Finance</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-6">
+                            <div class="content-card">
+                                <div class="card-header">
+                                    <h5><i class="bi bi-shield-lock"></i>Sécurité</h5>
+                                </div>
+                                <div class="card-body">
+                                    <button class="btn-secondary-custom w-100 mb-3" onclick="showChangePasswordModal()">
+                                        <i class="bi bi-key"></i>Changer Mot de Passe
+                                    </button>
+                                    <button class="btn-danger-custom w-100" onclick="confirmLogout()">
+                                        <i class="bi bi-box-arrow-right"></i>Déconnexion
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="content-card mt-4">
+                                <div class="card-header">
+                                    <h5><i class="bi bi-info-circle"></i>Informations</h5>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <td class="fw-bold">Application:</td>
+                                            <td>DivFinance Pro v3.2</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Organisation:</td>
+                                            <td>LA DIVINE Health Care</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Dernière connexion:</td>
+                                            <td id="lastLoginInfo">-</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div><!-- End Page Content -->
+        </main>
+    </div>
+
+    <!-- MODAL: Change Password -->
+    <div class="modal-overlay" id="changePasswordModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h5><i class="bi bi-key"></i>Changer Mot de Passe</h5>
+                <button class="modal-close" onclick="closeModal('changePasswordModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="mb-3">
+                        <label class="form-label">Mot de passe actuel</label>
+                        <input type="password" class="form-control" id="currentPassword" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Nouveau mot de passe</label>
+                        <input type="password" class="form-control" id="newPassword" required minlength="6">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Confirmer nouveau mot de passe</label>
+                        <input type="password" class="form-control" id="confirmPassword" required>
+                    </div>
+                    <button type="submit" class="btn-primary-custom w-100">
+                        <i class="bi bi-check"></i>Modifier Mot de Passe
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Auth Module -->
+    <script src="auth.js"></script>
+    <!-- App Logic -->
+    <script src="app.js"></script>
+
+    <!-- Pharmacy Panel Script -->
+    <script>
+        // Global variables for current user's pharmacy
+        let currentUser = null;
+        let userPharmacyId = null;
+        let userPharmacyName = '';
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!divFinanceAuth.requireAuth()) return;
+            
+            currentUser = divFinanceAuth.getCurrentUser();
+            
+            if (!currentUser) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Check role - only admin_pharmacie and caissier can use this page
+            const allowedRoles = ['admin_pharmacie', 'caissier'];
+            if (!allowedRoles.includes(currentUser.role)) {
+                divFinanceAuth.showToast('Cette page est réservée aux Admins Pharmacie et Caissiers.', 'error');
+                setTimeout(() => {
+                    window.location.href = 'principal.html';
+                }, 1500);
+                return;
+            }
+
+            initPharmacyPanel(currentUser);
+        });
+
+        function initPharmacyPanel(user) {
+            // Update user info
+            document.getElementById('userName').textContent = user.fullName;
+            document.getElementById('userRole').textContent = user.roleName;
+            document.getElementById('userAvatar').textContent = user.fullName.split(' ').map(n => n[0]).join('').substring(0, 2);
+
+            // Profile info
+            document.getElementById('profileAvatar').textContent = user.fullName.split(' ').map(n => n[0]).join('').substring(0, 2);
+            document.getElementById('profileName').textContent = user.fullName;
+            document.getElementById('profileRole').textContent = user.roleName;
+
+            // Get user's pharmacy
+            userPharmacyId = user.pharmacyId;
+            if (userPharmacyId) {
+                const pharmacies = divFinanceAuth.getPharmacies();
+                const pharma = pharmacies.find(p => p.id === userPharmacyId);
+                if (pharma) {
+                    userPharmacyName = pharma.name;
+                    document.getElementById('pharmacySidebarName').textContent = pharma.name;
+                    document.getElementById('profilePharmacy').textContent = `Pharmacie: ${pharma.name}`;
+                }
+            } else {
+                document.getElementById('pharmacySidebarName').textContent = 'Non assignée';
+                document.getElementById('profilePharmacy').textContent = 'Aucune pharmacie assignée';
+            }
+
+            // Set conversion rate display
+            document.getElementById('settingConversionRate').value = divFinanceApp.getConversionRate();
+
+            // Last login info
+            document.getElementById('lastLoginInfo').textContent = new Date(user.loginTime).toLocaleString('fr-FR');
+
+            // Initialize date fields with today
+            const today = divFinanceApp.formatDateForStorage(new Date());
+            document.querySelectorAll('#rjDate, #depDate, #verDate').forEach(el => {
+                if (el) el.value = today;
+            });
+
+            // Initialize month selectors
+            initMonthSelectors();
+
+            // Load dashboard
+            loadPharmaDashboard();
+
+            // Setup event listeners
+            setupEventListeners();
+        }
+
+        function initMonthSelectors() {
+            const now = new Date();
+            const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+            
+            ['phaMonthSelector', 'livreMonthFilter'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = currentMonth;
+            });
+        }
+
+        function setupEventListeners() {
+            // Sidebar navigation
+            document.querySelectorAll('.nav-link[data-panel]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    showPanel(this.dataset.panel);
+                    
+                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Toggle sidebar
+            document.getElementById('toggleSidebar')?.addEventListener('click', function() {
+                document.getElementById('sidebar').classList.toggle('collapsed');
+            });
+
+            // Forms
+            document.getElementById('rapportJournalierForm').addEventListener('submit', handleRapportJournalierSubmit);
+            document.getElementById('depenseForm').addEventListener('submit', handleDepenseSubmit);
+            document.getElementById('versementForm').addEventListener('submit', handleVersementSubmit);
+            document.getElementById('changePasswordForm').addEventListener('submit', handleChangePasswordSubmit);
+
+            // Product expire checkbox
+            document.getElementById('rjProduitExpire')?.addEventListener('change', function() {
+                document.getElementById('produitExpireFields').style.display = this.checked ? 'block' : 'none';
+            });
+        }
+
+        function showPanel(panelId) {
+            document.querySelectorAll('.panel-content').forEach(p => p.style.display = 'none');
+            const panel = document.getElementById(`panel-${panelId}`);
+            if (panel) panel.style.display = 'block';
+
+            const titles = {
+                'dashboard': 'Tableau de Bord',
+                'rapport-journalier': 'Rapport Journalier',
+                'depenses': 'Dépenses',
+                'mon-livre': 'Mon Livre de Comptes',
+                'versements': 'Versements',
+                'exports': 'Exports',
+                'parametres': 'Paramètres'
+            };
+            document.getElementById('pageTitle').textContent = titles[panelId] || 'Panel Pharmacie';
+
+            // Load panel-specific data
+            switch(panelId) {
+                case 'dashboard':
+                    loadPharmaDashboard();
+                    break;
+                case 'rapport-journalier':
+                    loadRapportsJournaliers();
+                    break;
+                case 'depenses':
+                    loadDepenses();
+                    break;
+                case 'mon-livre':
+                    loadMonLivre();
+                    break;
+                case 'versements':
+                    loadVersements();
+                    break;
+            }
+        }
+
+        // ============================================
+        // DASHBOARD FUNCTIONS
+        // ============================================
+
+        function loadPharmaDashboard(month) {
+            const today = divFinanceApp.formatDateForStorage(new Date());
+            const currentMonth = month || `${today.substring(0, 7)}`;
+
+            // Today's data for this pharmacy
+            const todaysReports = divFinanceApp.getRapportsJournaliers({ 
+                pharmacyId: userPharmacyId, 
+                dateFrom: today, 
+                dateTo: today 
+            });
+            const todaysDepenses = divFinanceApp.getDepenses({ 
+                pharmacyId: userPharmacyId, 
+                dateFrom: today, 
+                dateTo: today 
+            });
+
+            // KPI calculations
+            const ventesJourUsd = todaysReports.reduce((sum, r) => sum + r.venteUsd, 0);
+            const ventesJourFc = todaysReports.reduce((sum, r) => sum + r.venteFc, 0);
+            const ventesJourTotal = ventesJourUsd + (ventesJourFc / divFinanceApp.getConversionRate());
+
+            const depensesJour = todaysDepenses.reduce((sum, d) => sum + d.totalite, 0) +
+                               todaysReports.reduce((sum, r) => sum + r.totalDepenses, 0);
+
+            const soldeCaisse = todaysReports.reduce((sum, r) => sum + r.totalCahier, 0);
+
+            // Monthly data
+            const monthReports = divFinanceApp.getRapportsJournaliers({ 
+                pharmacyId: userPharmacyId, 
+                month: currentMonth 
+            });
+            const monthDepenses = divFinanceApp.getDepenses({ 
+                pharmacyId: userPharmacyId, 
+                month: currentMonth 
+            });
+            const monthVersements = divFinanceApp.getVersements({ 
+                pharmacyId: userPharmacyId, 
+                month: currentMonth 
+            });
+
+            const moisVentes = monthReports.reduce((sum, r) => sum + r.totalVentes, 0);
+            const moisDepensesTotal = monthDepenses.reduce((sum, d) => sum + d.totalite, 0) +
+                                      monthReports.reduce((sum, r) => sum + r.totalDepenses, 0);
+            const moisBenefice = moisVentes - (moisDepensesTotal / divFinanceApp.getConversionRate());
+
+            // Update UI
+            document.getElementById('phaKpiVentesJour').textContent = divFinanceApp.formatUSD(ventesJourTotal);
+            document.getElementById('phaKpiDepensesJour').textContent = divFinanceApp.formatUSD(depensesJour / divFinanceApp.getConversionRate());
+            document.getElementById('phaKpiSoldeCaisse').textContent = divFinanceApp.formatUSD(soldeCaisse);
+            document.getElementById('phaKpiRapportsMois').textContent = monthReports.length;
+
+            document.getElementById('phaMoisVentes').textContent = divFinanceApp.formatUSD(moisVentes);
+            document.getElementById('phaMoisDepenses').textContent = divFinanceApp.formatUSD(moisDepensesTotal / divFinanceApp.getConversionRate());
+            document.getElementById('phaMoisBenefice').textContent = divFinanceApp.formatUSD(moisBenefice);
+
+            // Recent reports table
+            const recentBody = document.getElementById('phaRecentReportsBody');
+            const allReports = divFinanceApp.getRapportsJournaliers({ pharmacyId: userPharmacyId }).slice(0, 10);
+            
+            if (allReports.length === 0) {
+                recentBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-muted">Aucun rapport récent</td></tr>`;
+            } else {
+                recentBody.innerHTML = allReports.map(r => `
+                    <tr>
+                        <td>${divFinanceApp.formatDateDisplay(r.date)}</td>
+                        <td class="table-number">${divFinanceApp.formatUSD(r.totalVentes)}</td>
+                        <td class="table-number">${divFinanceApp.formatFC(r.totalDepenses)}</td>
+                        <td class="table-number">${divFinanceApp.formatUSD(r.totalCahier)}</td>
+                        <td class="table-number">${divFinanceApp.formatUSD(r.totalSysteme)}</td>
+                        <td class="table-number ${(r.totalCahier - r.totalSysteme) >= 0 ? 'table-positive' : 'table-negative'}">
+                            ${divFinanceApp.formatUSD(r.totalCahier - r.totalSysteme)}
+                        </td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        // ============================================
+        // RAPPORT JOURNALIER FUNCTIONS
+        // ============================================
+
+        function calculateRJTotals() {
+            const data = {
+                venteUsd: parseFloat(document.getElementById('rjVenteUsd').value) || 0,
+                venteFc: parseFloat(document.getElementById('rjVenteFc').value) || 0,
+                emoneyEquity: parseFloat(document.getElementById('rjEmoneyEquity').value) || 0,
+                emoneyGga: parseFloat(document.getElementById('rjEmoneyGga').value) || 0,
+                emoneyTmb: parseFloat(document.getElementById('rjEmoneyTmb').value) || 0,
+                emoneyMoko: parseFloat(document.getElementById('rjEmoneyMoko').value) || 0,
+                depenseTransport: parseFloat(document.getElementById('rjDepenseTransport').value) || 0,
+                depenseAchats: parseFloat(document.getElementById('rjDepenseAchats').value) || 0,
+                depenseCarburant: parseFloat(document.getElementById('rjDepenseCarburant').value) || 0,
+                depenseAutres: parseFloat(document.getElementById('rjDepenseAutres').value) || 0
+            };
+
+            const totalVentes = divFinanceApp.calculateTotalVentes(data);
+            const totalEmoney = divFinanceApp.calculateTotalEmoney(data);
+            const totalDepenses = divFinanceApp.calculateTotalDepensesRJ(data);
+            const totalSysteme = totalVentes + (totalEmoney / divFinanceApp.getConversionRate()) - (totalDepenses / divFinanceApp.getConversionRate());
+
+            document.getElementById('rjTotalVentesDisplay').textContent = divFinanceApp.formatUSD(totalVentes);
+            document.getElementById('rjTotalEmoneyDisplay').textContent = divFinanceApp.formatFC(totalEmoney);
+            document.getElementById('rjTotalDepensesDisplay').textContent = divFinanceApp.formatFC(totalDepenses);
+            document.getElementById('rjTotalSysteme').value = divFinanceApp.formatUSD(totalSysteme);
+        }
+
+        function handleRapportJournalierSubmit(e) {
+            e.preventDefault();
+
+            const data = {
+                date: document.getElementById('rjDate').value,
+                pharmacyId: userPharmacyId,
+                pharmacyName: userPharmacyName,
+                venteUsd: document.getElementById('rjVenteUsd').value,
+                venteFc: document.getElementById('rjVenteFc').value,
+                emoneyEquity: document.getElementById('rjEmoneyEquity').value,
+                emoneyGga: document.getElementById('rjEmoneyGga').value,
+                emoneyTmb: document.getElementById('rjEmoneyTmb').value,
+                emoneyMoko: document.getElementById('rjEmoneyMoko').value,
+                depenseTransport: document.getElementById('rjDepenseTransport').value,
+                depenseAchats: document.getElementById('rjDepenseAchats').value,
+                depenseCarburant: document.getElementById('rjDepenseCarburant').value,
+                depenseAutres: document.getElementById('rjDepenseAutres').value,
+                totalCahier: document.getElementById('rjTotalCahier').value,
+                produitExpire: document.getElementById('rjProduitExpire').checked,
+                produitExpireMontant: document.getElementById('rjProduitExpireMontant').value
+            };
+
+            const result = divFinanceApp.saveRapportJournalier(data);
+            
+            if (result.success) {
+                divFinanceAuth.showToast('✅ Rapport soumis avec succès au Directeur Finance!', 'success');
+                e.target.reset();
+                
+                // Reset calculated values
+                document.querySelectorAll('#rapportJournalierForm input[type="number"]').forEach(input => {
+                    if (!['rjDate'].includes(input.id)) input.value = input.type === 'number' && !input.step.includes('.') ? '0' : '0.00';
+                });
+                calculateRJTotals();
+                
+                loadRapportsJournaliers();
+                loadPharmaDashboard();
+            } else {
+                divFinanceAuth.showToast(result.error, 'error');
+            }
+        }
+
+        function loadRapportsJournaliers() {
+            const filters = { pharmacyId: userPharmacyId };
+            const dateFrom = document.getElementById('filterRjDateFrom')?.value;
+            const dateTo = document.getElementById('filterRjDateTo')?.value;
+            
+            if (dateFrom) filters.dateFrom = dateFrom;
+            if (dateTo) filters.dateTo = dateTo;
+
+            const rapports = divFinanceApp.getRapportsJournaliers(filters);
+            const tbody = document.getElementById('rapportsJournaliersTableBody');
+
+            if (rapports.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted">Aucun rapport trouvé</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = rapports.map(r => `
+                <tr>
+                    <td>${divFinanceApp.formatDateDisplay(r.date)}</td>
+                    <td class="table-number table-positive">${divFinanceApp.formatUSD(r.totalVentes)}</td>
+                    <td class="table-number">${divFinanceApp.formatFC(r.totalEmoney)}</td>
+                    <td class="table-number">${divFinanceApp.formatFC(r.totalDepenses)}</td>
+                    <td class="table-number">${divFinanceApp.formatUSD(r.totalCahier)}</td>
+                    <td class="table-number ${r.totalSysteme >= 0 ? 'table-positive' : 'table-negative'}">${divFinanceApp.formatUSD(r.totalSysteme)}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteRapport('${r.id}')">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function deleteRapport(id) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer ce rapport?')) {
+                divFinanceApp.deleteRapportJournalier(id);
+                divFinanceAuth.showToast('Rapport supprimé.', 'success');
+                loadRapportsJournaliers();
+                loadPharmaDashboard();
+            }
+        }
+
+        // ============================================
+        // DEPENSES FUNCTIONS
+        // ============================================
+
+        function calculateDepTotal() {
+            const data = {
+                moon: parseFloat(document.getElementById('depMoon').value) || 0,
+                unique: parseFloat(document.getElementById('depUnique').value) || 0,
+                divers: parseFloat(document.getElementById('depDivers').value) || 0,
+                transportProduits: parseFloat(document.getElementById('depTransportProduits').value) || 0,
+                entretienMoto: parseFloat(document.getElementById('depEntretienMoto').value) || 0,
+                carburant: parseFloat(document.getElementById('depCarburant').value) || 0,
+                promed: parseFloat(document.getElementById('depPromed').value) || 0,
+                loer: parseFloat(document.getElementById('depLoer').value) || 0
+            };
+
+            const total = divFinanceApp.calculateTotalDepense(data);
+            document.getElementById('depTotaliteDisplay').textContent = divFinanceApp.formatFC(total);
+        }
+
+        function handleDepenseSubmit(e) {
+            e.preventDefault();
+
+            const data = {
+                date: document.getElementById('depDate').value,
+                pharmacyId: userPharmacyId,
+                pharmacyName: userPharmacyName,
+                moon: document.getElementById('depMoon').value,
+                unique: document.getElementById('depUnique').value,
+                divers: document.getElementById('depDivers').value,
+                transportProduits: document.getElementById('depTransportProduits').value,
+                entretienMoto: document.getElementById('depEntretienMoto').value,
+                carburant: document.getElementById('depCarburant').value,
+                promed: document.getElementById('depPromed').value,
+                loer: document.getElementById('depLoer').value,
+                description: document.getElementById('depDescription').value,
+                // Set other categories to 0
+                demandeFonds: 0,
+                transportAgents: 0,
+                travauxBoss: 0,
+                tegermoTaxes: 0,
+                salaireFermiers: 0,
+                kinMed: 0,
+                compteMoussa: 0,
+                travauxPhaDepot: 0
+            };
+
+            const result = divFinanceApp.saveDepense(data);
+            
+            if (result.success) {
+                divFinanceAuth.showToast('Dépense enregistrée avec succès!', 'success');
+                e.target.reset();
+                
+                // Reset values to 0
+                document.querySelectorAll('#depenseForm input[type="number"]').forEach(input => {
+                    if (input.id !== 'depDate') input.value = 0;
+                });
+                calculateDepTotal();
+                
+                loadDepenses();
+                loadPharmaDashboard();
+            } else {
+                divFinanceAuth.showToast(result.error, 'error');
+            }
+        }
+
+        function loadDepenses() {
+            const depenses = divFinanceApp.getDepenses({ pharmacyId: userPharmacyId });
+            const tbody = document.getElementById('depensesTableBody');
+
+            if (depenses.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-muted">Aucune dépense trouvée</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = depenses.slice(0, 50).map(d => `
+                <tr>
+                    <td>${divFinanceApp.formatDateDisplay(d.date)}</td>
+                    <td class="table-number">${divFinanceApp.formatFC(d.moon + d.unique + d.promed + d.loer + d.kinMed)}</td>
+                    <td class="table-number">${divFinanceApp.formatFC(d.transportProduits + d.transportAgents + d.carburant)}</td>
+                    <td class="table-number">${divFinanceApp.formatFC(d.divers + d.entretienMoto + d.demandeFonds + d.travauxBoss + d.tegermoTaxes + d.salaireFermiers + d.compteMoussa + d.travauxPhaDepot)}</td>
+                    <td class="table-number table-negative">${divFinanceApp.formatFC(d.totalite)}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteDepense('${d.id}')">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function deleteDepense(id) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cette dépense?')) {
+                divFinanceApp.deleteDepense(id);
+                divFinanceAuth.showToast('Dépense supprimée.', 'success');
+                loadDepenses();
+                loadPharmaDashboard();
+            }
+        }
+
+        // ============================================
+        // VERSEMENTS FUNCTIONS
+        // ============================================
+
+        function handleVersementSubmit(e) {
+            e.preventDefault();
+
+            const data = {
+                date: document.getElementById('verDate').value,
+                pharmacyId: userPharmacyId,
+                pharmacyName: userPharmacyName,
+                montantUsd: document.getElementById('verMontantUsd').value,
+                montantFc: document.getElementById('verMontantFc').value,
+                modeVersement: document.getElementById('verMode').value,
+                reference: document.getElementById('verReference').value,
+                notes: document.getElementById('verNotes').value
+            };
+
+            const result = divFinanceApp.saveVersement(data);
+            
+            if (result.success) {
+                divFinanceAuth.showToast('✅ Versement envoyé au Directeur Finance!', 'success');
+                e.target.reset();
+                document.getElementById('verDate').value = divFinanceApp.formatDateForStorage(new Date());
+                loadVersements();
+                loadPharmaDashboard();
+            } else {
+                divFinanceAuth.showToast(result.error, 'error');
+            }
+        }
+
+        function loadVersements() {
+            const versements = divFinanceApp.getVersements({ pharmacyId: userPharmacyId });
+            const tbody = document.getElementById('versementsTableBody');
+
+            if (versements.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-muted">Aucun versement trouvé</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = versements.map(v => `
+                <tr>
+                    <td>${divFinanceApp.formatDateDisplay(v.date)}</td>
+                    <td class="table-number table-positive">${divFinanceApp.formatUSD(v.montantUsd)}</td>
+                    <td class="table-number">${divFinanceApp.formatFC(v.montantFc)}</td>
+                    <td><span class="badge-status badge-info">${v.modeVersement}</span></td>
+                    <td><code>${v.reference || '-'}</code></td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteVersement('${v.id}')">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function deleteVersement(id) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer ce versement?')) {
+                divFinanceApp.deleteVersement(id);
+                divFinanceAuth.showToast('Versement supprimé.', 'success');
+                loadVersements();
+                loadPharmaDashboard();
+            }
+        }
+
+        // ============================================
+        // MON LIVRE FUNCTIONS
+        // ============================================
+
+        function loadMonLivre() {
+            const month = document.getElementById('livreMonthFilter')?.value;
+            if (!month) return;
+
+            const reports = divFinanceApp.getRapportsJournaliers({ pharmacyId: userPharmacyId, month });
+            const depenses = divFinanceApp.getDepenses({ pharmacyId: userPharmacyId, month });
+            const versements = divFinanceApp.getVersements({ pharmacyId: userPharmacyId, month });
+
+            const totalVentes = reports.reduce((sum, r) => sum + r.totalVentes, 0);
+            const totalDepenses = depenses.reduce((sum, d) => sum + d.totalite, 0) +
+                                 reports.reduce((sum, r) => sum + r.totalDepenses, 0);
+            const totalVersements = versements.reduce((sum, v) => sum + v.montantUsd + (v.montantFc / divFinanceApp.getConversionRate()), 0);
+
+            document.getElementById('livreTotalVentes').textContent = divFinanceApp.formatUSD(totalVentes);
+            document.getElementById('livreTotalDepenses').textContent = divFinanceApp.formatUSD(totalDepenses / divFinanceApp.getConversionRate());
+            document.getElementById('livreTotalVersements').textContent = divFinanceApp.formatUSD(totalVersements);
+            document.getElementById('livreSolde').textContent = divFinanceApp.formatUSD(totalVentes - (totalDepenses / divFinanceApp.getConversionRate()) - totalVersements);
+
+            // Build operations list
+            let operations = [];
+            let runningBalance = 0;
+
+            reports.forEach(r => {
+                runningBalance += r.totalVentes - (r.totalDepenses / divFinanceApp.getConversionRate());
+                operations.push({
+                    date: r.date,
+                    type: 'Rapport Journalier',
+                    desc: `Ventes: ${divFinanceApp.formatUSD(r.totalVentes)}`,
+                    entree: r.totalVentes,
+                    sortie: r.totalDepenses / divFinanceApp.getConversionRate(),
+                    balance: runningBalance
+                });
+            });
+
+            depenses.forEach(d => {
+                runningBalance -= d.totalite / divFinanceApp.getConversionRate();
+                operations.push({
+                    date: d.date,
+                    type: 'Dépense',
+                    desc: d.description || 'Dépense générale',
+                    entree: 0,
+                    sortie: d.totalite / divFinanceApp.getConversionRate(),
+                    balance: runningBalance
+                });
+            });
+
+            versements.forEach(v => {
+                runningBalance -= (v.montantUsd + (v.montantFc / divFinanceApp.getConversionRate()));
+                operations.push({
+                    date: v.date,
+                    type: 'Versement',
+                    desc: `${v.modeVersement} - ${v.reference || ''}`,
+                    entree: 0,
+                    sortie: v.montantUsd + (v.montantFc / divFinanceApp.getConversionRate()),
+                    balance: runningBalance
+                });
+            });
+
+            operations.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            const tbody = document.getElementById('monLivreTableBody');
+
+            if (operations.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-muted">Aucune opération ce mois</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = operations.map(op => `
+                <tr>
+                    <td>${divFinanceApp.formatDateDisplay(op.date)}</td>
+                    <td><span class="badge-status badge-${op.type.includes('Rapport') ? 'success' : op.type.includes('Dépense') ? 'danger' : 'info'}">${op.type}</span></td>
+                    <td>${op.desc}</td>
+                    <td class="table-number ${op.entree > 0 ? 'table-positive' : ''}">${op.entree > 0 ? divFinanceApp.formatUSD(op.entree) : '-'}</td>
+                    <td class="table-number ${op.sortie > 0 ? 'table-negative' : ''}">${op.sortie > 0 ? divFinanceApp.formatUSD(op.sortie) : '-'}</td>
+                    <td class="table-number fw-bold ${op.balance >= 0 ? 'table-positive' : 'table-negative'}">${divFinanceApp.formatUSD(op.balance)}</td>
+                </tr>
+            `).join('');
+        }
+
+        // ============================================
+        // EXPORT FUNCTIONS
+        // ============================================
+
+        function exportMyReports() {
+            divFinanceApp.exportRapportsJournaliersCSV({ pharmacyId: userPharmacyId });
+        }
+
+        function exportMyExpenses() {
+            divFinanceApp.exportDepensesCSV({ pharmacyId: userPharmacyId });
+        }
+
+        function exportMyPayments() {
+            divFinanceApp.exportVersementsCSV({ pharmacyId: userPharmacyId });
+        }
+
+        // ============================================
+        // SETTINGS FUNCTIONS
+        // ============================================
+
+        function showChangePasswordModal() {
+            openModal('changePasswordModal');
+        }
+
+        function handleChangePasswordSubmit(e) {
+            e.preventDefault();
+            
+            const currentPass = document.getElementById('currentPassword').value;
+            const newPass = document.getElementById('newPassword').value;
+            const confirmPass = document.getElementById('confirmPassword').value;
+
+            if (newPass !== confirmPass) {
+                divFinanceAuth.showToast('Les mots de passe ne correspondent pas.', 'error');
+                return;
+            }
+
+            const result = divFinanceAuth.changePassword(currentPass, newPass);
+            
+            if (result.success) {
+                divFinanceAuth.showToast(result.message, 'success');
+                closeModal('changePasswordModal');
+                e.target.reset();
+            } else {
+                divFinanceAuth.showToast(result.error, 'error');
+            }
+        }
+
+        function confirmLogout() {
+            if (confirm('Êtes-vous sûr de vouloir vous déconnecter?')) {
+                divFinanceAuth.logout();
+            }
+        }
+
+        // ============================================
+        // UTILITY FUNCTIONS
+        // ============================================
+
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        // Close modals on outside click
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('show');
+                }
+            });
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay.show').forEach(m => m.classList.remove('show'));
+            }
+        });
+    </script>
+</body>
+</html>

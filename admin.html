@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DivFinance Pro v3.2 - Administration</title>
+    
+    <!-- Bootstrap 5.3.2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom Styles -->
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <i class="bi bi-gear-wide-connected"></i>
+                </div>
+                <div class="sidebar-brand">
+                    <h5>Administration</h5>
+                    <small>DivFinance Pro v3.2</small>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section-title">Gestion</div>
+                
+                <div class="nav-item">
+                    <a href="#" class="nav-link active" data-panel="users">
+                        <i class="bi bi-people"></i>
+                        <span class="nav-link-text">Utilisateurs</span>
+                        <span class="nav-badge" id="badgeUsers">0</span>
+                    </a>
+                </div>
+
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-panel="pharmacies">
+                        <i class="bi bi-building"></i>
+                        <span class="nav-link-text">Pharmacies</span>
+                        <span class="nav-badge" id="badgePharmacies">0</span>
+                    </a>
+                </div>
+
+                <div class="nav-section-title">Système</div>
+
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-panel="system-settings">
+                        <i class="bi bi-sliders"></i>
+                        <span class="nav-link-text">Paramètres Système</span>
+                    </a>
+                </div>
+
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-panel="logs">
+                        <i class="bi bi-journal-code"></i>
+                        <span class="nav-link-text">Journal des Activités</span>
+                    </a>
+                </div>
+
+                <div class="nav-section-title">Navigation</div>
+
+                <div class="nav-item">
+                    <a href="principal.html" class="nav-link">
+                        <i class="bi bi-speedometer2"></i>
+                        <span class="nav-link-text">Tableau de Bord Financier</span>
+                    </a>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar" id="userAvatar">AD</div>
+                    <div class="user-info">
+                        <div class="user-name" id="userName">Admin</div>
+                        <div class="user-role" id="userRole">Super Admin Tech</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="main-content">
+            <!-- TOP HEADER -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="toggle-sidebar" id="toggleSidebar" title="Toggle Sidebar">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <div class="page-title">
+                        <h1 id="pageTitle">Utilisateurs</h1>
+                        <p>Gestion du système DivFinance Pro</p>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="header-btn" onclick="location.reload()" title="Rafraîchir">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </button>
+                    <button class="header-btn" onclick="divFinanceAuth.logout()" title="Déconnexion">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- PAGE CONTENT -->
+            <div class="page-content">
+                
+                <!-- ==================== PANEL: USERS ==================== -->
+                <section class="panel-content active" id="panel-users">
+                    <div class="row g-4">
+                        <!-- User Form / List Toggle -->
+                        <div class="col-12">
+                            <div class="content-card mb-4">
+                                <div class="card-header">
+                                    <h5><i class="bi bi-people-fill"></i>Gestion des Utilisateurs</h5>
+                                    <button class="btn-primary-custom btn-sm-custom" onclick="showUserForm()">
+                                        <i class="bi bi-plus-lg"></i>Nouvel Utilisateur
+                                    </button>
+                                </div>
+                                
+                                <!-- User Creation Form (Hidden by default) -->
+                                <div class="card-body border-bottom" id="userFormContainer" style="display: none;">
+                                    <form id="userForm" class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Nom Complet *</label>
+                                            <input type="text" class="form-control" id="userFullName" required placeholder="Jean Dupont">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Nom d'utilisateur *</label>
+                                            <input type="text" class="form-control" id="userUsername" required placeholder="jdupont">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" class="form-control" id="userEmail" placeholder="jean@divfinance.com">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Mot de passe *</label>
+                                            <input type="password" class="form-control" id="userPassword" required minlength="6" placeholder="Minimum 6 caractères">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Rôle *</label>
+                                            <select class="form-select" id="userRole" required>
+                                                <option value="">Sélectionner un rôle...</option>
+                                                <option value="admin_pharmacie">Admin Pharmacie</option>
+                                                <option value="comptable">Comptable</option>
+                                                <option value="caissier">Caissier</option>
+                                                <option value="consultant">Consultant</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Pharmacie Assignée</label>
+                                            <select class="form-select" id="userPharmacy">
+                                                <option value="">Toutes les pharmacies (si applicable)</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 d-flex gap-2 justify-content-end">
+                                            <button type="button" class="btn-secondary-custom" onclick="hideUserForm()">
+                                                Annuler
+                                            </button>
+                                            <button type="submit" class="btn-primary-custom">
+                                                <i class="bi bi-save"></i>Créer l'Utilisateur
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <!-- Users Table -->
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="data-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Utilisateur</th>
+                                                    <th>Nom d'utilisateur</th>
+                                                    <th>Rôle</th>
+                                                    <th>Pharmacie</th>
+                                                    <th>Statut</th>
+                                                    <th>Date Création</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="usersTableBody">
+                                                <tr>
+                                                    <td colspan="7" class="text-center py-4 text-muted">
+                                                        Chargement...
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== PANEL: PHARMACIES ==================== -->
+                <section class="panel-content" id="panel-pharmacies" style="display: none;">
+                    <div class="row g-4">
+                        <div class="col-12">
+                            <div class="content-card mb-4">
+                                <div class="card-header">
+                                    <h5><i class="bi bi-building"></i>Gestion des Pharmacies</h5>
+                                    <button class="btn-primary-custom btn-sm-custom" onclick="showPharmacyForm()">
+                                        <i class="bi bi-plus-lg"></i>Nouvelle Pharmacie
+                                    </button>
+                                </div>
+                                
+                                <!-- Pharmacy Form (Hidden by default) -->
+                                <div class="card-body border-bottom" id="pharmacyFormContainer" style="display: none;">
+                                    <form id="pharmacyForm" class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Nom de la Pharmacie *</label>
+                                            <input type="text" class="form-control" id="pharmaName" required placeholder="Ex: PHARMACIE CENTRALE">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Nom Court *</label>
+                                            <input type="text" class="form-control" id="pharmaShortName" required placeholder="Ex: PC">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Code *</label>
+                                            <input type="text" class="form-control" id="pharmaCode" required placeholder="Ex: PCT">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Adresse</label>
+                                            <input type="text" class="form-control" id="pharmaAddress" placeholder="Kinshasa, RDC">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Téléphone</label>
+                                            <input type="tel" class="form-control" id="pharmaPhone" placeholder="+243 XXX XXX XXX">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="checkbox" id="pharmaIsDepot">
+                                                <label class="form-check-label" for="pharmaIsDepot">Est un Dépôt Central</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 d-flex gap-2 justify-content-end">
+                                            <button type="button" class="btn-secondary-custom" onclick="hidePharmacyForm()">
+                                                Annuler
+                                            </button>
+                                            <button type="submit" class="btn-primary-custom">
+                                                <i class="bi bi-save"></i>Créer la Pharmacie
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <!-- Pharmacies Grid -->
+                                <div class="card-body">
+                                    <div class="pharmacy-grid" id="adminPharmaciesGrid">
+                                        <!-- Pharmacies will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== PANEL: SYSTEM SETTINGS ==================== -->
+                <section class="panel-content" id="panel-system-settings" style="display: none;">
+                    <div class="row g-4">
+                        <div class="col-lg-6">
+                            <div class="content-card">
+                                <div class="card-header">
+                                    <h5><i class="bi bi-currency-exchange"></i>Paramètres Financiers</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="systemSettingsForm">
+                                        <div class="mb-4">
+                                            <label class="form-label fw-bold">Taux de Conversion FC/USD</label>
+                                            <div class="input-group input-group-lg">
+                                                <span class="input-group-text">1 USD =</span>
+                                                <input type="number" class="form-control" id="sysConversionRate" 
+                                                       value="2800" step="1" min="1">
+                                                <span class="input-group-text">FC</span>
+                                            </div>
+                                            <small class="text-muted">Taux utilisé pour les conversions automatiques dans l'application.</small>
+                                        </div>
+                                        
+                                        <hr>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold">Nom de l'Organisation</label>
+                                            <input type="text" class="form-control" id="sysCompanyName" 
+                                                   value="LA DIVINE Health Care">
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold">Pied de Page Rapports</label>
+                                            <input type="text" class="form-control" id="sysReportFooter" 
+                                                   value="Document généré par DivFinance Pro v3.2">
+                                        </div>
+
+                                        <button type="submit" class="btn-primary-custom w-100">
+                                            <i class="bi bi-check-lg"></i>Sauvegarder les Paramètres
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="content-card">
+                                <div class="card-header">
+                                    <h5><i class="bi bi-database"></i>Gestion des Données</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="alert alert-warning mb-4">
+                                        <i class="bi bi-exclamation-triangle me-2"></i>
+                                        <strong>Attention!</strong> Les actions ci-dessous sont irréversibles.
+                                    </div>
+
+                                    <div class="d-flex flex-column gap-3">
+                                        <button class="btn btn-outline-info w-100" onclick="exportAllSystemData()">
+                                            <i class="bi bi-download me-2"></i>Exporter Toutes les Données (JSON)
+                                        </button>
+                                        
+                                        <button class="btn btn-outline-warning w-100" onclick="document.getElementById('importFile').click()">
+                                            <i class="bi bi-upload me-2"></i>Importer des Données
+                                        </button>
+                                        <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importSystemData(event)">
+                                        
+                                        <hr>
+                                        
+                                        <button class="btn btn-outline-danger w-100" onclick="clearAllDataConfirm()">
+                                            <i class="bi bi-trash me-2"></i>Effacer Toutes les Données
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="content-card mt-4">
+                                <div class="card-header">
+                                    <h5><i class="bi bi-info-circle"></i>Informations Système</h5>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <td class="fw-bold">Version:</td>
+                                            <td>DivFinance Pro v3.2</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Stockage:</td>
+                                            <td id="storageUsed">Calcul...</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Utilisateurs:</td>
+                                            <td id="totalUsersCount">-</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Pharmacies:</td>
+                                            <td id="totalPharmaciesCount">-</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Dernière Mise à Jour:</td>
+                                            <td id="lastUpdate">-</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== PANEL: LOGS ==================== -->
+                <section class="panel-content" id="panel-logs" style="display: none;">
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h5><i class="bi bi-journal-code"></i>Journal des Activités Récentes</h5>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="loadLogs()">
+                                <i class="bi bi-arrow-clockwise"></i>Rafraîchir
+                            </button>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive" style="max-height: 600px;">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Date/Heure</th>
+                                            <th>Utilisateur</th>
+                                            <th>Action</th>
+                                            <th>Détails</th>
+                                            <th>Statut</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="logsTableBody">
+                                        <tr>
+                                            <td colspan="5" class="text-center py-4 text-muted">
+                                                Le journal d'activités sera disponible dans une prochaine version.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div><!-- End Page Content -->
+        </main>
+    </div>
+
+    <!-- MODAL: Edit User -->
+    <div class="modal-overlay" id="editUserModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h5><i class="bi bi-pencil-square"></i>Modifier l'Utilisateur</h5>
+                <button class="modal-close" onclick="closeModal('editUserModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editUserForm">
+                    <input type="hidden" id="editUserId">
+                    <div class="mb-3">
+                        <label class="form-label">Nom Complet</label>
+                        <input type="text" class="form-control" id="editUserFullName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" id="editUserEmail">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Rôle</label>
+                        <select class="form-select" id="editUserRole">
+                            <option value="super_admin_tech">Super Admin Tech</option>
+                            <option value="super_admin_finance">Super Admin Finance</option>
+                            <option value="admin_pharmacie">Admin Pharmacie</option>
+                            <option value="comptable">Comptable</option>
+                            <option value="caissier">Caissier</option>
+                            <option value="consultant">Consultant</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Statut</label>
+                        <select class="form-select" id="editUserStatus">
+                            <option value="true">Actif</option>
+                            <option value="false">Inactif</option>
+                        </select>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn-secondary-custom flex-fill" onclick="closeModal('editUserModal')">
+                            Annuler
+                        </button>
+                        <button type="submit" class="btn-primary-custom flex-fill">
+                            Sauvegarder
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Edit Pharmacy -->
+    <div class="modal-overlay" id="editPharmacyModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h5><i class="bi bi-pencil-square"></i>Modifier la Pharmacie</h5>
+                <button class="modal-close" onclick="closeModal('editPharmacyModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editPharmacyForm">
+                    <input type="hidden" id="editPharmacyId">
+                    <div class="mb-3">
+                        <label class="form-label">Nom de la Pharmacie</label>
+                        <input type="text" class="form-control" id="editPharmaName" required>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label">Nom Court</label>
+                            <input type="text" class="form-control" id="editPharmaShortName" required>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">Code</label>
+                            <input type="text" class="form-control" id="editPharmaCode" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Adresse</label>
+                        <input type="text" class="form-control" id="editPharmaAddress">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Téléphone</label>
+                        <input type="tel" class="form-control" id="editPharmaPhone">
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="editPharmaIsDepot">
+                            <label class="form-check-label" for="editPharmaIsDepot">Est un Dépôt Central</label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Statut</label>
+                        <select class="form-select" id="editPharmaStatus">
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn-secondary-custom flex-fill" onclick="closeModal('editPharmacyModal')">
+                            Annuler
+                        </button>
+                        <button type="submit" class="btn-primary-custom flex-fill">
+                            Sauvegarder
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Auth Module -->
+    <script src="auth.js"></script>
+    <!-- App Logic -->
+    <script src="app.js"></script>
+
+    <!-- Admin Panel Script -->
+    <script>
+        // ============================================
+        // INITIALIZATION & AUTH CHECK
+        // ============================================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check authentication and role
+            if (!divFinanceAuth.requireAuth()) {
+                return;
+            }
+
+            const user = divFinanceAuth.getCurrentUser();
+            
+            // Only Super Admin Tech can access this page
+            if (!divFinanceAuth.canCreateUsers()) {
+                divFinanceAuth.showToast('Accès refusé. Permissions insuffisantes.', 'error');
+                setTimeout(() => {
+                    window.location.href = 'principal.html';
+                }, 1500);
+                return;
+            }
+
+            initAdminPanel(user);
+        });
+
+        function initAdminPanel(user) {
+            // Update user info in sidebar
+            document.getElementById('userName').textContent = user.fullName;
+            document.getElementById('userRole').textContent = user.roleName;
+            document.getElementById('userAvatar').textContent = user.fullName.split(' ').map(n => n[0]).join('').substring(0, 2);
+
+            // Load initial data
+            loadUsers();
+            loadPharmacies();
+            updateSystemInfo();
+
+            // Setup event listeners
+            setupEventListeners();
+            
+            // Load pharmacy dropdowns
+            loadPharmacyDropdowns();
+        }
+
+        function setupEventListeners() {
+            // Sidebar navigation
+            document.querySelectorAll('.nav-link[data-panel]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const panel = this.dataset.panel;
+                    showPanel(panel);
+                    
+                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Toggle sidebar
+            document.getElementById('toggleSidebar')?.addEventListener('click', function() {
+                document.getElementById('sidebar').classList.toggle('collapsed');
+            });
+
+            // Forms
+            document.getElementById('userForm').addEventListener('submit', handleUserSubmit);
+            document.getElementById('pharmacyForm').addEventListener('submit', handlePharmacySubmit);
+            document.getElementById('editUserForm').addEventListener('submit', handleEditUserSubmit);
+            document.getElementById('editPharmacyForm').addEventListener('submit', handleEditPharmacySubmit);
+            document.getElementById('systemSettingsForm').addEventListener('submit', handleSystemSettingsSubmit);
+        }
+
+        function showPanel(panelId) {
+            document.querySelectorAll('.panel-content').forEach(p => p.style.display = 'none');
+            const panel = document.getElementById(`panel-${panelId}`);
+            if (panel) panel.style.display = 'block';
+
+            const titles = {
+                'users': 'Utilisateurs',
+                'pharmacies': 'Pharmacies',
+                'system-settings': 'Paramètres Système',
+                'logs': 'Journal des Activités'
+            };
+            document.getElementById('pageTitle').textContent = titles[panelId] || 'Administration';
+        }
+
+        // ============================================
+        // USERS MANAGEMENT
+        // ============================================
+
+        function showUserForm() {
+            document.getElementById('userFormContainer').style.display = 'block';
+            document.getElementById('userFullName').focus();
+        }
+
+        function hideUserForm() {
+            document.getElementById('userFormContainer').style.display = 'none';
+            document.getElementById('userForm').reset();
+        }
+
+        function loadPharmacyDropdowns() {
+            const pharmacies = divFinanceAuth.getPharmacies().filter(p => p.isActive);
+            const options = pharmacies.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+            
+            ['userPharmacy'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.innerHTML = '<option value="">Toutes les pharmacies (si applicable)</option>' + options;
+                }
+            });
+        }
+
+        function loadUsers() {
+            const users = divFinanceAuth.getUsers();
+            const tbody = document.getElementById('usersTableBody');
+            
+            document.getElementById('badgeUsers').textContent = users.length;
+
+            if (users.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted">Aucun utilisateur trouvé</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = users.map(u => {
+                const roleInfo = divFinanceAuth.USER_ROLES[u.role] || { name: u.role, level: 99 };
+                const pharma = u.pharmacyId ? divFinanceAuth.getPharmacies().find(p => p.id === u.pharmacyId) : null;
+                
+                return `
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="user-avatar" style="width: 32px; height: 32px; font-size: 11px;">${u.fullName.split(' ').map(n => n[0]).join('').substring(0, 2)}</div>
+                                <strong>${u.fullName}</strong>
+                            </div>
+                        </td>
+                        <td><code>${u.username}</code></td>
+                        <td>
+                            <span class="badge-status badge-info">${roleInfo.name}</span>
+                        </td>
+                        <td>${pharma ? pharma.name : '<span class="text-muted">Toutes</span>'}</td>
+                        <td>
+                            <span class="badge-status ${u.isActive ? 'badge-success' : 'badge-danger'}">
+                                ${u.isActive ? 'Actif' : 'Inactif'}
+                            </span>
+                        </td>
+                        <td>${divFinanceApp.formatDateDisplay(u.createdAt)}</td>
+                        <td>
+                            <div class="d-flex gap-1">
+                                <button class="btn btn-sm btn-outline-primary" onclick="editUser('${u.id}')" ${u.isDefault && u.role === 'super_admin_tech' ? 'disabled' : ''}>
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteUser('${u.id}')" ${u.isDefault ? 'disabled' : ''}>
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function handleUserSubmit(e) {
+            e.preventDefault();
+
+            const data = {
+                fullName: document.getElementById('userFullName').value,
+                username: document.getElementById('userUsername').value,
+                email: document.getElementById('userEmail').value,
+                password: document.getElementById('userPassword').value,
+                role: document.getElementById('userRole').value,
+                pharmacyId: document.getElementById('userPharmacy').value || null
+            };
+
+            const result = divFinanceAuth.createUser(data);
+
+            if (result.success) {
+                divFinanceAuth.showToast(result.message, 'success');
+                hideUserForm();
+                loadUsers();
+                updateSystemInfo();
+            } else {
+                divFinanceAuth.showToast(result.error, 'error');
+            }
+        }
+
+        function editUser(userId) {
+            const users = divFinanceAuth.getUsers();
+            const user = users.find(u => u.id === userId);
+            
+            if (!user) return;
+
+            document.getElementById('editUserId').value = user.id;
+            document.getElementById('editUserFullName').value = user.fullName;
+            document.getElementById('editUserEmail').value = user.email || '';
+            document.getElementById('editUserRole').value = user.role;
+            document.getElementById('editUserStatus').value = user.isActive.toString();
+
+            openModal('editUserModal');
+        }
+
+        function handleEditUserSubmit(e) {
+            e.preventDefault();
+
+            const userId = document.getElementById('editUserId').value;
+            const data = {
+                fullName: document.getElementById('editUserFullName').value,
+                email: document.getElementById('editUserEmail').value,
+                role: document.getElementById('editUserRole').value,
+                isActive: document.getElementById('editUserStatus').value === 'true'
+            };
+
+            const result = divFinanceAuth.updateUser(userId, data);
+
+            if (result.success) {
+                divFinanceAuth.showToast(result.message, 'success');
+                closeModal('editUserModal');
+                loadUsers();
+            } else {
+                divFinanceAuth.showToast(result.error, 'error');
+            }
+        }
+
+        function deleteUser(userId) {
+            const users = divFinanceAuth.getUsers();
+            const user = users.find(u => u.id === userId);
+
+            if (user?.isDefault) {
+                divFinanceAuth.showToast('Impossible de supprimer un administrateur par défaut.', 'error');
+                return;
+            }
+
+            if (confirm(`Êtes-vous sûr de vouloir supprimer l'utilisateur "${user?.fullName}"?`)) {
+                const result = divFinanceAuth.deleteUser(userId);
+                if (result.success) {
+                    divFinanceAuth.showToast(result.message, 'success');
+                    loadUsers();
+                    updateSystemInfo();
+                } else {
+                    divFinanceAuth.showToast(result.error, 'error');
+                }
+            }
+        }
+
+        // ============================================
+        // PHARMACIES MANAGEMENT
+        // ============================================
+
+        function showPharmacyForm() {
+            document.getElementById('pharmacyFormContainer').style.display = 'block';
+            document.getElementById('pharmaName').focus();
+        }
+
+        function hidePharmacyForm() {
+            document.getElementById('pharmacyFormContainer').style.display = 'none';
+            document.getElementById('pharmacyForm').reset();
+        }
+
+        function loadPharmacies() {
+            const pharmacies = divFinanceAuth.getPharmacies();
+            const grid = document.getElementById('adminPharmaciesGrid');
+            
+            document.getElementById('badgePharmacies').textContent = pharmacies.filter(p => p.isActive).length;
+
+            grid.innerHTML = pharmacies.map(p => `
+                <div class="pharmacy-card ${p.isActive ? '' : 'inactive'}">
+                    <div class="pharmacy-header">
+                        <div class="pharmacy-icon">
+                            <i class="bi ${p.isDepot ? 'bi-box-seam' : 'bi-shop'}"></i>
+                        </div>
+                        <div>
+                            <h6 class="pharmacy-name mb-0">${p.name}</h6>
+                            <span class="pharmacy-code">${p.code} ${p.isDepot ? '(Dépot)' : ''}</span>
+                        </div>
+                        <span class="badge-status ms-auto ${p.isActive ? 'badge-success' : 'badge-danger'}">
+                            ${p.isActive ? 'Active' : 'Inactive'}
+                        </span>
+                    </div>
+                    <div class="mt-3 small text-muted">
+                        <div><i class="bi bi-geo-alt me-1"></i>${p.address || 'Non spécifiée'}</div>
+                        <div><i class="bi bi-telephone me-1"></i>${p.phone || 'Non spécifié'}</div>
+                    </div>
+                    <div class="mt-3 d-flex gap-2">
+                        <button class="btn btn-sm btn-outline-primary flex-fill" onclick="editPharmacy('${p.id}')">
+                            <i class="bi bi-pencil"></i> Modifier
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deletePharmacy('${p.id}')">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function handlePharmacySubmit(e) {
+            e.preventDefault();
+
+            const pharmacies = divFinanceAuth.getPharmacies();
+            
+            const newPharmacy = {
+                id: `pha_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+                name: document.getElementById('pharmaName').value,
+                shortName: document.getElementById('pharmaShortName').value,
+                code: document.getElementById('pharmaCode').value.toUpperCase(),
+                address: document.getElementById('pharmaAddress').value,
+                phone: document.getElementById('pharmaPhone').value,
+                isDepot: document.getElementById('pharmaIsDepot').checked,
+                isActive: true,
+                createdAt: new Date().toISOString()
+            };
+
+            // Check for duplicate code
+            if (pharmacies.find(p => p.code === newPharmacy.code)) {
+                divFinanceAuth.showToast('Ce code de pharmacie existe déjà.', 'error');
+                return;
+            }
+
+            pharmacies.push(newPharmacy);
+            localStorage.setItem(divFinanceAuth.STORAGE_KEYS.PHARMACIES, JSON.stringify(pharmacies));
+
+            divFinanceAuth.showToast(`Pharmacie "${newPharmacy.name}" créée avec succès!`, 'success');
+            hidePharmacyForm();
+            loadPharmacies();
+            loadPharmacyDropdowns();
+            updateSystemInfo();
+        }
+
+        function editPharmacy(pharmacyId) {
+            const pharmacies = divFinanceAuth.getPharmacies();
+            const pharma = pharmacies.find(p => p.id === pharmacyId);
+            
+            if (!pharma) return;
+
+            document.getElementById('editPharmacyId').value = pharma.id;
+            document.getElementById('editPharmaName').value = pharma.name;
+            document.getElementById('editPharmaShortName').value = pharma.shortName;
+            document.getElementById('editPharmaCode').value = pharma.code;
+            document.getElementById('editPharmaAddress').value = pharma.address || '';
+            document.getElementById('editPharmaPhone').value = pharma.phone || '';
+            document.getElementById('editPharmaIsDepot').checked = pharma.isDepot || false;
+            document.getElementById('editPharmaStatus').value = pharma.isActive.toString();
+
+            openModal('editPharmacyModal');
+        }
+
+        function handleEditPharmacySubmit(e) {
+            e.preventDefault();
+
+            const pharmacyId = document.getElementById('editPharmacyId').value;
+            const pharmacies = divFinanceAuth.getPharmacies();
+            const index = pharmacies.findIndex(p => p.id === pharmacyId);
+
+            if (index === -1) {
+                divFinanceAuth.showToast('Pharmacie non trouvée.', 'error');
+                return;
+            }
+
+            pharmacies[index] = {
+                ...pharmacies[index],
+                name: document.getElementById('editPharmaName').value,
+                shortName: document.getElementById('editPharmaShortName').value,
+                code: document.getElementById('editPharmaCode').value.toUpperCase(),
+                address: document.getElementById('editPharmaAddress').value,
+                phone: document.getElementById('editPharmaPhone').value,
+                isDepot: document.getElementById('editPharmaIsDepot').checked,
+                isActive: document.getElementById('editPharmaStatus').value === 'true',
+                updatedAt: new Date().toISOString()
+            };
+
+            localStorage.setItem(divFinanceAuth.STORAGE_KEYS.PHARMACIES, JSON.stringify(pharmacies));
+
+            divFinanceAuth.showToast('Pharmacie mise à jour avec succès!', 'success');
+            closeModal('editPharmacyModal');
+            loadPharmacies();
+            loadPharmacyDropdowns();
+        }
+
+        function deletePharmacy(pharmacyId) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cette pharmacie? Cette action est irréversible.')) {
+                let pharmacies = divFinanceAuth.getPharmacies();
+                pharmacies = pharmacies.filter(p => p.id !== pharmacyId);
+                localStorage.setItem(divFinanceAuth.STORAGE_KEYS.PHARMACIES, JSON.stringify(pharmacies));
+
+                divFinanceAuth.showToast('Pharmacie supprimée.', 'success');
+                loadPharmacies();
+                loadPharmacyDropdowns();
+                updateSystemInfo();
+            }
+        }
+
+        // ============================================
+        // SYSTEM SETTINGS
+        // ============================================
+
+        function handleSystemSettingsSubmit(e) {
+            e.preventDefault();
+
+            const conversionRate = parseFloat(document.getElementById('sysConversionRate').value);
+            divFinanceApp.setConversionRate(conversionRate);
+            
+            divFinanceApp.settings.companyName = document.getElementById('sysCompanyName').value;
+            divFinanceApp.settings.reportFooter = document.getElementById('sysReportFooter').value;
+            
+            localStorage.setItem(divFinanceApp.STORAGE_KEYS.SETTINGS, JSON.stringify(divFinanceApp.settings));
+            
+            divFinanceAuth.showToast('Paramètres système sauvegardés!', 'success');
+            updateSystemInfo();
+        }
+
+        function updateSystemInfo() {
+            const stats = divFinanceApp.getSummaryStats();
+            document.getElementById('totalUsersCount').textContent = divFinanceAuth.getUsers().length;
+            document.getElementById('totalPharmaciesCount').textContent = divFinanceAuth.getPharmacies().length;
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleString('fr-FR');
+
+            // Calculate storage usage
+            let totalSize = 0;
+            for (let key in localStorage) {
+                if (localStorage.hasOwnProperty(key) && key.startsWith('divfinance_')) {
+                    totalSize += localStorage.getItem(key).length * 2; // UTF-16
+                }
+            }
+            document.getElementById('storageUsed').textContent = `${(totalSize / 1024).toFixed(1)} KB`;
+
+            // Set current values
+            document.getElementById('sysConversionRate').value = divFinanceApp.getConversionRate();
+            document.getElementById('sysCompanyName').value = divFinanceApp.settings.companyName;
+            document.getElementById('sysReportFooter').value = divFinanceApp.settings.reportFooter;
+        }
+
+        // ============================================
+        // DATA IMPORT/EXPORT
+        // ============================================
+
+        function exportAllSystemData() {
+            const data = {
+                version: '3.2',
+                exportDate: new Date().toISOString(),
+                users: divFinanceAuth.getUsers(),
+                pharmacies: divFinanceAuth.getPharmacies(),
+                settings: divFinanceApp.settings,
+                rapportsJournaliers: divFinanceApp.getRapportsJournaliers(),
+                depenses: divFinanceApp.getDepenses(),
+                versements: divFinanceApp.getVersements(),
+                dettesFournisseurs: divFinanceApp.getDettesFournisseurs()
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `divfinance_backup_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+
+            divFinanceAuth.showToast('Export des données réussi!', 'success');
+        }
+
+        function importSystemData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    if (!confirm('Cette action remplacera toutes les données actuelles. Continuer?')) {
+                        return;
+                    }
+
+                    if (data.users) localStorage.setItem(divFinanceAuth.STORAGE_KEYS.USERS, JSON.stringify(data.users));
+                    if (data.pharmacies) localStorage.setItem(divFinanceAuth.STORAGE_KEYS.PHARMACIES, JSON.stringify(data.pharmacies));
+                    if (data.rapportsJournaliers) localStorage.setItem(divFinanceApp.STORAGE_KEYS.RAPPORTS_JOURNALIERS, JSON.stringify(data.rapportsJournaliers));
+                    if (data.depenses) localStorage.setItem(divFinanceApp.STORAGE_KEYS.DEPENSES, JSON.stringify(data.depenses));
+                    if (data.versements) localStorage.setItem(divFinanceApp.STORAGE_KEYS.VERSEMENTS, JSON.stringify(data.versements));
+                    if (data.dettesFournisseurs) localStorage.setItem(divFinanceApp.STORAGE_KEYS.DETTES_FOURNISSEURS, JSON.stringify(data.dettesFournisseurs));
+                    if (data.settings) localStorage.setItem(divFinanceApp.STORAGE_KEYS.SETTINGS, JSON.stringify(data.settings));
+
+                    divFinanceAuth.showToast('Données importées avec succès!', 'success');
+                    location.reload();
+                } catch (err) {
+                    divFinanceAuth.showToast('Erreur lors de l\'import: fichier invalide.', 'error');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        function clearAllDataConfirm() {
+            if (confirm('⚠️ ATTENTION!\n\nVous êtes sur le point de supprimer TOUTES les données.\n\nCette action est IRRÉVERSIBLE.\n\nConfirmer la suppression?')) {
+                if (confirmer('Dernière confirmation: Voulez-vous vraiment tout effacer?')) {
+                    divFinanceApp.clearAllData();
+                    divFinanceAuth.showToast('Toutes les données ont été effacées.', 'success');
+                    setTimeout(() => location.reload(), 1000);
+                }
+            }
+        }
+
+        function loadLogs() {
+            // Placeholder for future logging functionality
+            divFinanceAuth.showToast('Le journal d\'activités sera disponible prochainement.', 'info');
+        }
+
+        // ============================================
+        // UTILITY FUNCTIONS
+        // ============================================
+
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        // Close modals on outside click
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('show');
+                }
+            });
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay.show').forEach(m => m.classList.remove('show'));
+            }
+        });
+    </script>
+</body>
+</html>

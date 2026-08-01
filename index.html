@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DivFinance Pro v3.2 - Connexion</title>
+    
+    <!-- Bootstrap 5.3.2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom Styles -->
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <!-- Header -->
+            <div class="login-header">
+                <div class="login-logo">
+                    <i class="bi bi-currency-dollar"></i>
+                </div>
+                <h1 class="login-title">DivFinance Pro</h1>
+                <p class="login-subtitle">Système de Gestion Financière<br>LA DIVINE Health Care - Réseau Pharmacies RDC</p>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="login-form">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="username" placeholder="Nom d'utilisateur" required autocomplete="username">
+                    <label for="username"><i class="bi bi-person me-2"></i>Nom d'utilisateur</label>
+                </div>
+
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="password" placeholder="Mot de passe" required autocomplete="current-password">
+                    <label for="password"><i class="bi bi-lock me-2"></i>Mot de passe</label>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="showPassword">
+                    <label class="form-check-label" for="showPassword" style="font-size: 13px; color: #6b7280;">
+                        Afficher le mot de passe
+                    </label>
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    Se Connecter
+                </button>
+
+                <!-- Error Message -->
+                <div id="errorMessage" class="alert alert-danger mt-3 d-none" role="alert"></div>
+            </form>
+
+            <!-- Footer with Credentials -->
+            <div class="login-footer">
+                <p class="text-center mb-2" style="font-size: 12px; color: #9ca3af;">
+                    <i class="bi bi-info-circle me-1"></i>Identifiants des Administrateurs
+                </p>
+                
+                <div class="login-credentials">
+                    <div class="credential-item">
+                        <span class="credential-label">
+                            <i class="bi bi-shield-lock text-success me-1"></i>Super Admin Tech
+                        </span>
+                        <span class="credential-value">fabricefb / 1234Div@</span>
+                    </div>
+                    <div class="credential-item">
+                        <span class="credential-label">
+                            <i class="bi bi-shield-check text-primary me-1"></i>Directeur Finance
+                        </span>
+                        <span class="credential-value">directeur_finance / DFinance2026!</span>
+                    </div>
+                </div>
+
+                <p class="text-center mt-3 mb-0" style="font-size: 11px; color: #d1d5db;">
+                    Version 3.2 &copy; 2024 DivFinance Pro
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Auth Module -->
+    <script src="auth.js"></script>
+    
+    <script>
+        // Check if already logged in
+        (function() {
+            if (divFinanceAuth.isLoggedIn()) {
+                const user = divFinanceAuth.getCurrentUser();
+                if (user && divFinanceAuth.USER_ROLES[user.role]) {
+                    window.location.href = divFinanceAuth.USER_ROLES[user.role].redirectPage;
+                }
+            }
+        })();
+
+        // Show/Hide Password Toggle
+        document.getElementById('showPassword').addEventListener('change', function() {
+            const passwordInput = document.getElementById('password');
+            passwordInput.type = this.checked ? 'text' : 'password';
+        });
+
+        // Login Form Handler
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('errorMessage');
+            const loginBtn = document.getElementById('loginBtn');
+
+            // Reset error
+            errorDiv.classList.add('d-none');
+            
+            // Validate inputs
+            if (!username || !password) {
+                showError('Veuillez remplir tous les champs.');
+                return;
+            }
+
+            // Show loading state
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Connexion en cours...';
+
+            // Simulate slight delay for UX
+            setTimeout(() => {
+                const result = divFinanceAuth.login(username, password);
+
+                if (result.success) {
+                    // Success - redirect based on role
+                    divFinanceAuth.showToast(result.message, 'success');
+                    
+                    setTimeout(() => {
+                        window.location.href = result.redirectUrl;
+                    }, 500);
+                } else {
+                    // Error
+                    showError(result.error);
+                    loginBtn.disabled = false;
+                    loginBtn.innerHTML = '<i class="bi bi-box-arrow-in-right"></i>Se Connecter';
+                }
+            }, 800);
+        });
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.classList.remove('d-none');
+            errorDiv.classList.add('fade-in');
+        }
+
+        // Enter key handling for better UX
+        document.getElementById('username').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('password').focus();
+            }
+        });
+    </script>
+</body>
+</html>
