@@ -149,85 +149,113 @@
                 
                 <!-- ==================== PANEL: DASHBOARD ==================== -->
                 <section class="panel-content active" id="panel-dashboard">
-                    <!-- KPI Cards Row 1 -->
+                    <!-- KPI Cards Row 1 - Style PRO V2 -->
                     <div class="kpi-grid">
-                        <div class="kpi-card primary">
-                            <div class="kpi-header">
-                                <div class="kpi-icon green"><i class="bi bi-graph-up-arrow"></i></div>
-                                <div class="kpi-trend up"><i class="bi bi-arrow-up-short"></i>Aujourd'hui</div>
+                        <div class="kpi-card emerald">
+                            <div class="kpi-content">
+                                <div class="kpi-text">
+                                    <div class="kpi-label">Ventes du Jour</div>
+                                    <div class="kpi-value" id="kpiVentesJour">$0.00</div>
+                                    <div class="kpi-subtext" id="kpiVentesDetail">USD + FC convertis</div>
+                                </div>
+                                <div class="kpi-icon-box">
+                                    <i class="bi bi-graph-up-arrow"></i>
+                                </div>
                             </div>
-                            <div class="kpi-label">Ventes du Jour</div>
-                            <div class="kpi-value" id="kpiVentesJour">$0.00</div>
-                            <div class="kpi-subtext" id="kpiVentesDetail">USD + FC convertis</div>
                         </div>
 
-                        <div class="kpi-card danger">
-                            <div class="kpi-header">
-                                <div class="kpi-icon red"><i class="bi bi-cart-dash"></i></div>
-                                <div class="kpi-trend down"><i class="bi bi-arrow-down-short"></i>Dépenses</div>
+                        <div class="kpi-card red">
+                            <div class="kpi-content">
+                                <div class="kpi-text">
+                                    <div class="kpi-label">Dépenses du Jour</div>
+                                    <div class="kpi-value" id="kpiDepensesJour">$0.00</div>
+                                    <div class="kpi-subtext">Total des dépenses</div>
+                                </div>
+                                <div class="kpi-icon-box">
+                                    <i class="bi bi-cart-dash"></i>
+                                </div>
                             </div>
-                            <div class="kpi-label">Dépenses du Jour</div>
-                            <div class="kpi-value" id="kpiDepensesJour">$0.00</div>
-                            <div class="kpi-subtext">Total des dépenses</div>
                         </div>
 
-                        <div class="kpi-card success">
-                            <div class="kpi-header">
-                                <div class="kpi-icon green"><i class="bi bi-wallet2"></i></div>
-                                <div class="kpi-trend up"><i class="bi bi-check-circle"></i>Solde</div>
+                        <div class="kpi-card blue">
+                            <div class="kpi-content">
+                                <div class="kpi-text">
+                                    <div class="kpi-label">Solde Caisse</div>
+                                    <div class="kpi-value" id="kpiSoldeCaisse">$0.00</div>
+                                    <div class="kpi-subtext">Total physique compté</div>
+                                </div>
+                                <div class="kpi-icon-box">
+                                    <i class="bi bi-wallet2"></i>
+                                </div>
                             </div>
-                            <div class="kpi-label">Solde Caisse</div>
-                            <div class="kpi-value" id="kpiSoldeCaisse">$0.00</div>
-                            <div class="kpi-subtext">Total physique compté</div>
                         </div>
 
-                        <div class="kpi-card warning">
-                            <div class="kpi-header">
-                                <div class="kpi-icon orange"><i class="bi bi-calculator"></i></div>
-                                <div class="kpi-trend" id="ecartTrendClass"><i class="bi bi-dash"></i>Écart</div>
+                        <div class="kpi-card orange">
+                            <div class="kpi-content">
+                                <div class="kpi-text">
+                                    <div class="kpi-label">Écart Global</div>
+                                    <div class="kpi-value" id="kpiEcartGlobal">$0.00</div>
+                                    <div class="kpi-subtext">Caisse vs Système</div>
+                                </div>
+                                <div class="kpi-icon-box">
+                                    <i class="bi bi-calculator"></i>
+                                </div>
                             </div>
-                            <div class="kpi-label">Écart Global</div>
-                            <div class="kpi-value" id="kpiEcartGlobal">$0.00</div>
-                            <div class="kpi-subtext">Caisse vs Système</div>
                         </div>
                     </div>
 
-                    <!-- KPI Cards Row 2 -->
+                    <!-- KPI Cards Row 2 - Style PRO V2 -->
                     <div class="kpi-grid">
-                        <div class="kpi-card info">
-                            <div class="kpi-header">
-                                <div class="kpi-icon blue"><i class="bi bi-exclamation-circle"></i></div>
+                        <div class="kpi-card purple">
+                            <div class="kpi-content">
+                                <div class="kpi-text">
+                                    <div class="kpi-label">Dettes Actives</div>
+                                    <div class="kpi-value" id="kpiDettesActives">0</div>
+                                    <div class="kpi-subtext">Fournisseurs en cours</div>
+                                </div>
+                                <div class="kpi-icon-box">
+                                    <i class="bi bi-exclamation-circle"></i>
+                                </div>
                             </div>
-                            <div class="kpi-label">Dettes Actives</div>
-                            <div class="kpi-value" id="kpiDettesActives">0</div>
-                            <div class="kpi-subtext">Fournisseurs en cours</div>
                         </div>
 
-                        <div class="kpi-card secondary">
-                            <div class="kpi-header">
-                                <div class="kpi-icon purple"><i class="bi bi-building"></i></div>
+                        <div class="kpi-card teal">
+                            <div class="kpi-content">
+                                <div class="kpi-text">
+                                    <div class="kpi-label">Pharmacies Actives</div>
+                                    <div class="kpi-value" id="kpiPharmaciesActives">0</div>
+                                    <div class="kpi-subtext">Sites opérationnels</div>
+                                </div>
+                                <div class="kpi-icon-box">
+                                    <i class="bi bi-building"></i>
+                                </div>
                             </div>
-                            <div class="kpi-label">Pharmacies Actives</div>
-                            <div class="kpi-value" id="kpiPharmaciesActives">0</div>
-                            <div class="kpi-subtext">Sites opérationnels</div>
                         </div>
 
-                        <div class="kpi-card success">
-                            <div class="kpi-header">
-                                <div class="kpi-icon cyan"><i class="bi bi-file-earmark-text"></i></div>
+                        <div class="kpi-card indigo">
+                            <div class="kpi-content">
+                                <div class="kpi-text">
+                                    <div class="kpi-label">Rapports Aujourd'hui</div>
+                                    <div class="kpi-value" id="kpiRapportsAujourdhui">0</div>
+                                    <div class="kpi-subtext">Rapports journaliers</div>
+                                </div>
+                                <div class="kpi-icon-box">
+                                    <i class="bi bi-file-earmark-text"></i>
+                                </div>
                             </div>
-                            <div class="kpi-label">Rapports Aujourd'hui</div>
-                            <div class="kpi-value" id="kpiRapportsAujourdhui">0</div>
-                            <div class="kpi-subtext">Rapports journaliers</div>
                         </div>
 
-                        <div class="kpi-card danger">
-                            <div class="kpi-header">
-                                <div class="kpi-icon red"><i class="bi bi-clock-history"></i></div>
+                        <div class="kpi-card gray">
+                            <div class="kpi-content">
+                                <div class="kpi-text">
+                                    <div class="kpi-label">Dettes en Retard</div>
+                                    <div class="kpi-value" id="kpiDettesRetard">0</div>
+                                    <div class="kpi-subtext">Échéances dépassées</div>
+                                </div>
+                                <div class="kpi-icon-box">
+                                    <i class="bi bi-clock-history"></i>
+                                </div>
                             </div>
-                            <div class="kpi-label">Dettes en Retard</div>
-                            <div class="kpi-value" id="kpiDettesRetard">0</div>
-                            <div class="kpi-subtext">Échéances dépassées</div>
                         </div>
                     </div>
 
@@ -242,17 +270,29 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="kpi-grid" style="grid-template-columns: repeat(3, 1fr);">
-                                        <div class="kpi-card primary" style="margin-bottom: 0;">
-                                            <div class="kpi-label">Total Ventes</div>
-                                            <div class="kpi-value" id="moisVentes">$0.00</div>
+                                        <div class="kpi-card emerald" style="margin-bottom: 0;">
+                                            <div class="kpi-content">
+                                                <div class="kpi-text">
+                                                    <div class="kpi-label">Total Ventes</div>
+                                                    <div class="kpi-value" id="moisVentes">$0.00</div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="kpi-card danger" style="margin-bottom: 0;">
-                                            <div class="kpi-label">Total Dépenses</div>
-                                            <div class="kpi-value" id="moisDepenses">$0.00</div>
+                                        <div class="kpi-card red" style="margin-bottom: 0;">
+                                            <div class="kpi-content">
+                                                <div class="kpi-text">
+                                                    <div class="kpi-label">Total Dépenses</div>
+                                                    <div class="kpi-value" id="moisDepenses">$0.00</div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="kpi-card success" style="margin-bottom: 0;">
-                                            <div class="kpi-label">Bénéfice Net</div>
-                                            <div class="kpi-value" id="moisBenefice">$0.00</div>
+                                        <div class="kpi-card blue" style="margin-bottom: 0;">
+                                            <div class="kpi-content">
+                                                <div class="kpi-text">
+                                                    <div class="kpi-label">Bénéfice Net</div>
+                                                    <div class="kpi-value" id="moisBenefice">$0.00</div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

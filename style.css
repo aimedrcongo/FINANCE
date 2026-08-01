@@ -593,95 +593,119 @@ body {
 }
 
 /* ============================================
-   DASHBOARD CARDS & KPIs
+   DASHBOARD CARDS & KPIs - PRO STYLE V2
    ============================================ */
 .kpi-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 20px;
     margin-bottom: 24px;
 }
 
+/* KPI Card - Style Professionnel Clean */
 .kpi-card {
     background: var(--bg-primary);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
     padding: 24px;
-    box-shadow: var(--shadow);
-    border-left: 4px solid transparent;
+    box-shadow: var(--shadow-sm);
+    border: none;
     transition: all var(--transition);
-    position: relative;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .kpi-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-md);
 }
 
-.kpi-card.primary { border-left-color: var(--primary); }
-.kpi-card.success { border-left-color: var(--success); }
-.kpi-card.warning { border-left-color: var(--warning); }
-.kpi-card.danger { border-left-color: var(--danger); }
-.kpi-card.info { border-left-color: var(--info); }
-.kpi-card.secondary { border-left-color: var(--secondary); }
+/* Variantes de couleur FOND CLAIR (comme v2) */
+.kpi-card.emerald { background: #ecfdf5; }      /* Vert clair pour ventes */
+.kpi-card.red { background: #fef2f2; }           /* Rouge clair pour dépenses */
+.kpi-card.blue { background: #eff6ff; }          /* Bleu clair pour solde */
+.kpi-card.orange { background: #fff7ed; }        /* Orange clair pour écart */
+.kpi-card.purple { background: #faf5ff; }        /* Violet clair pour dettes */
+.kpi-card.teal { background: #f0fdfa; }          /* Teal clair pour pharmacies */
+.kpi-card.indigo { background: #eef2ff; }        /* Indigo clair pour rapports */
+.kpi-card.gray { background: #f9fafb; }          /* Gris clair pour dettes retard */
 
-.kpi-header {
+/* Couleurs des valeurs selon variante */
+.kpi-card.emerald .kpi-value { color: #059669; }
+.kpi-card.red .kpi-value { color: #dc2626; }
+.kpi-card.blue .kpi-value { color: #2563eb; }
+.kpi-card.orange .kpi-value { color: #ea580c; }
+.kpi-card.purple .kpi-value { color: #9333ea; }
+.kpi-card.teal .kpi-value { color: #0d9488; }
+.kpi-card.indigo .kpi-value { color: #4f46e5; }
+.kpi-card.gray .kpi-value { color: #6b7280; }
+
+/* Layout interne: texte GAUCHE, icône DROITE */
+.kpi-card .kpi-content {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    margin-bottom: 16px;
+    gap: 16px;
 }
 
-.kpi-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: var(--radius-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
+.kpi-card .kpi-text {
+    flex: 1;
+    min-width: 0;
 }
-
-.kpi-icon.green { background: var(--primary-bg); color: var(--primary); }
-.kpi-icon.blue { background: #eff6ff; color: var(--info); }
-.kpi-icon.orange { background: #fffbeb; color: var(--accent-orange); }
-.kpi-icon.red { background: #fef2f2; color: var(--danger); }
-.kpi-icon.purple { background: #f5f3ff; color: var(--secondary); }
-.kpi-icon.cyan { background: #ecfeff; color: var(--accent-cyan); }
-
-.kpi-trend {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 12px;
-    font-weight: 600;
-    padding: 4px 8px;
-    border-radius: var(--radius-full);
-}
-
-.kpi-trend.up { background: var(--primary-bg); color: var(--primary-dark); }
-.kpi-trend.down { background: #fef2f2; color: var(--danger); }
 
 .kpi-label {
-    font-size: 13px;
-    color: var(--gray-500);
+    font-size: 14px;
+    color: #6b7280;
     font-weight: 500;
-    margin-bottom: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    margin-bottom: 6px;
 }
 
 .kpi-value {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 700;
-    color: var(--gray-900);
-    line-height: 1.2;
+    line-height: 1.3;
 }
 
 .kpi-subtext {
     font-size: 12px;
-    color: var(--gray-400);
-    margin-top: 8px;
+    color: #9ca3af;
+    margin-top: 4px;
+}
+
+/* Icône carrée colorée SOLIDE à droite */
+.kpi-icon-box {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.kpi-icon-box i,
+.kpi-icon-box svg {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+}
+
+/* Couleurs des icônes SOLIDES */
+.kpi-card.emerald .kpi-icon-box { background: #10b981; color: white; }
+.kpi-card.red .kpi-icon-box { background: #ef4444; color: white; }
+.kpi-card.blue .kpi-icon-box { background: #3b82f6; color: white; }
+.kpi-card.orange .kpi-icon-box { background: #f97316; color: white; }
+.kpi-card.purple .kpi-icon-box { background: #a855f7; color: white; }
+.kpi-card.teal .kpi-icon-box { background: #14b8a6; color: white; }
+.kpi-card.indigo .kpi-icon-box { background: #6366f1; color: white; }
+.kpi-card.gray .kpi-icon-box { background: #9ca3af; color: white; }
+
+/* Responsive Grid */
+@media (max-width: 1200px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 576px) {
+    .kpi-grid { grid-template-columns: 1fr; }
 }
 
 /* ============================================
