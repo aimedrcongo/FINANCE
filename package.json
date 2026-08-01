@@ -1,0 +1,66 @@
+{
+  "name": "divfinance-pro",
+  "version": "3.2.0",
+  "description": "DivFinance Pro v3.2 - Application de Gestion Financière Professionnelle pour LA DIVINE Health Care",
+  "author": "LA DIVINE Health Care",
+  "license": "MIT",
+  "main": "main.js",
+  "homepage": "https://github.com/aimedrcongo/FINANCE#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aimedrcongo/FINANCE.git"
+  },
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "build-win": "electron-builder --win",
+    "build-portable": "electron-builder --win portable",
+    "rebuild": "electron-rebuild -f -w sqlite3"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.ladivine.divfinance.pro",
+    "productName": "DivFinance Pro",
+    "copyright": "Copyright © 2026 LA DIVINE Health Care",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!dist",
+      "!node_modules"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "icon.ico",
+      "artifactName": "${productName}-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "DivFinance Pro",
+      "installerIcon": "icon.ico",
+      "uninstallerIcon": "icon.ico",
+      "uninstallDisplayName": "DivFinance Pro v3.2",
+      "license": "LICENSE"
+    },
+    "portable": {
+      "artifactName": "${productName}-Portable-${version}.${ext}"
+    }
+  }
+}
